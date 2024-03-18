@@ -1,19 +1,19 @@
 //board
-var blockSize = 25;
-var boardSize = 18;
-var board;
-var context;
+const blockSize = 25;
+const boardSize = 18;
+let board;
+let context;
 
 //meeple
-var meepleX = blockSize * 5;
-var meepleY = blockSize * 5;
+let meepleX = blockSize * 5;
+let meepleY = blockSize * 5;
 
 //target
-var targetX;
-var targetY;
+let targetX;
+let targetY;
 
 //gameover
-var gameOver = false;
+let gameOver = false;
 
 window.onload = function () {
   board = document.getElementById("board");
