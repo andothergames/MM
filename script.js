@@ -8,7 +8,6 @@ var context;
 var meepleX = blockSize * 5;
 var meepleY = blockSize * 5;
 
-
 //target
 var targetX;
 var targetY;
@@ -27,7 +26,6 @@ window.onload = function () {
   setInterval(update, 1000/10);
 };
 
-
 function update() {
   //gameover
   if (gameOver) {
@@ -38,24 +36,11 @@ function update() {
   context.fillStyle = "lightgrey";
   context.fillRect(0, 0, board.width, board.height);
   
-
   //target
-  context.fillStyle = "deeppink";
-  context.beginPath();
-  context.arc(targetX + 12.5, targetY + 12.5, blockSize / 2, 0, 2 * Math.PI);
-  context.fill();
+  drawCircle("deeppink", targetX, targetY, blockSize, 2);
+  drawCircle("white", targetX, targetY, blockSize, 3);
+  drawCircle("deeppink", targetX, targetY, blockSize, 5);
   
-  context.fillStyle = "white";
-  context.beginPath();
-  context.arc(targetX + 12.5, targetY + 12.5, blockSize / 3, 0, 2 * Math.PI);
-  context.fill();
-
-  context.fillStyle = "deeppink";
-  context.beginPath();
-  context.arc(targetX + 12.5, targetY + 12.5, blockSize / 5, 0, 2 * Math.PI);
-  context.fill();
-
-
   //meeple
   context.fillStyle = "aquamarine";
   context.fillRect(meepleX, meepleY, blockSize, blockSize);
@@ -82,7 +67,9 @@ function update() {
 
 }
 
-//draw line functions
+//FUNCTIONS
+
+//gridlines
 function drawColLine(x, startY, endY) {
   context.beginPath();
   context.moveTo(x, startY);
@@ -97,6 +84,15 @@ function drawRowLine(y, startX, endX) {
   context.stroke();
 }
 
+//target circle
+function drawCircle(color, x, y, r, div) {
+  context.fillStyle = color;
+  context.beginPath();
+  context.arc(x + 12.5, y + 12.5, r / div, 0, 2 * Math.PI);
+  context.fill();
+}
+
+//movement
 function move(e) {
   if (e.code == "ArrowUp") {
     meepleY = 0;
@@ -113,6 +109,7 @@ function move(e) {
   
 }
 
+//randomise target
 function placeTarget() {
   targetX = Math.floor(Math.random() * boardSize) * blockSize;
   targetY = Math.floor(Math.random() * boardSize) * blockSize;
