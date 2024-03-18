@@ -1,0 +1,12 @@
+/* FONTS */
+
+@font-face {
+    font-family: 'incons';
+    src:url(Inconsolata-Regular.ttf);  
+}
+
+body {
+    font-family: incons;
+    text-align: center;
+    
+}
