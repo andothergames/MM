@@ -8,9 +8,6 @@ let boardStructure = [{row:true,existson:1,after:2},
                       {row:true,existson:10,after:0},
                       {row:true,existson:14,after:16},
                       {row:true,existson:2,after:3}];
-////eeeeeee
-/////maybe this comment won't be on origin/head
-
 
 //meeple
 let meepleX = blockSize * 5;
