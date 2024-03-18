@@ -7,8 +7,7 @@ var context;
 //meeple
 var meepleX = blockSize * 5;
 var meepleY = blockSize * 5;
-var velocityX = 0;
-var velocityY = 0;
+
 
 //target
 var targetX;
@@ -30,19 +29,7 @@ window.onload = function () {
 
 //draw line functions
 
-function drawColLine(x, startY, endY) {
-    context.beginPath();
-    context.moveTo(x, startY);
-    context.lineTo(x, endY);
-    context.stroke();
-  }
 
-  function drawRowLine(y, startX, endX) {
-    context.beginPath();
-    context.moveTo(startX, y);
-    context.lineTo(endX, y);
-    context.stroke();
-  }
 
 function update() {
   //gameover
@@ -89,6 +76,20 @@ function update() {
     blockSize
   );
 
+}
+
+function drawColLine(x, startY, endY) {
+  context.beginPath();
+  context.moveTo(x, startY);
+  context.lineTo(x, endY);
+  context.stroke();
+}
+
+function drawRowLine(y, startX, endX) {
+  context.beginPath();
+  context.moveTo(startX, y);
+  context.lineTo(endX, y);
+  context.stroke();
 }
 
 function move(e) {
