@@ -11,3 +11,65 @@ body {
     color: white;
     background-color: black;
 }
+
+.controls {
+    width: 100%;
+    max-width: 600px;
+    height: 80px;
+    margin: 40px auto;
+    
+}
+
+.buttons {
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    background-color: lightgrey;
+    border-radius: 20px;
+}
+
+button {
+    margin: 40px auto;
+    width: 30px;
+    height: 30px;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+button:hover {
+    transform: scale(1.2);
+
+}
+
+#forrestjump {
+    background-color: aquamarine;
+}
+
+#ozzymosis {
+    background-color: lightslategrey;
+}
+
+#bluebeamer {
+    background-color: dodgerBlue;
+}
+
+#shortstop {
+    background-color: tan;
+}
+
+#sidestep {
+    background-color: hotpink;
+}
+
+#skewt {
+    background-color: ghostwhite;
+}
+
+#mcedge {
+    background-color: yellow;
+}
+
+#carbon {
+    background-color: darkslategrey;
+}
