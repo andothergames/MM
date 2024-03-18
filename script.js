@@ -23,7 +23,7 @@ window.onload = function () {
 
   placeTarget();
   document.addEventListener("keyup", move);
-  setInterval(update, 1000/10);
+  setInterval(update, 1000 / 10);
 };
 
 function update() {
@@ -35,12 +35,12 @@ function update() {
   //board
   context.fillStyle = "lightgrey";
   context.fillRect(0, 0, board.width, board.height);
-  
+
   //target
   drawCircle("deeppink", targetX, targetY, blockSize, 2);
   drawCircle("white", targetX, targetY, blockSize, 3);
   drawCircle("deeppink", targetX, targetY, blockSize, 5);
-  
+
   //meeple
   context.fillStyle = "aquamarine";
   context.fillRect(meepleX, meepleY, blockSize, blockSize);
@@ -49,9 +49,9 @@ function update() {
   let startingX = 0;
   let startingY = 0;
   for (let i = 0; i < boardSize; i++) {
-    drawColLine(startingX, 0, 450)
-    drawRowLine(startingY, 0, 450)
-    startingX += blockSize; 
+    drawColLine(startingX, 0, 450);
+    drawRowLine(startingY, 0, 450);
+    startingX += blockSize;
     startingY += blockSize;
   }
 
@@ -64,7 +64,6 @@ function update() {
     blockSize,
     blockSize
   );
-
 }
 
 //FUNCTIONS
@@ -96,17 +95,13 @@ function drawCircle(color, x, y, r, div) {
 function move(e) {
   if (e.code == "ArrowUp") {
     meepleY = 0;
-  }
-  else if (e.code == "ArrowDown") {
+  } else if (e.code == "ArrowDown") {
     meepleY = (boardSize - 1) * blockSize;
-  }
-  else if (e.code == "ArrowLeft") {
+  } else if (e.code == "ArrowLeft") {
     meepleX = 0;
-  }
-  else if (e.code == "ArrowRight") {
+  } else if (e.code == "ArrowRight") {
     meepleX = (boardSize - 1) * blockSize;
   }
-  
 }
 
 //randomise target
