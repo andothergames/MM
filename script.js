@@ -60,20 +60,15 @@ function update() {
   context.fillStyle = "aquamarine";
   context.fillRect(meepleX, meepleY, blockSize, blockSize);
 
-  //col lines
+  //gridlines
   let startingX = 0;
-  for (let i = 0; i < boardSize; i++) {
-    drawColLine(startingX, 0, 450)
-    startingX += blockSize; 
-  }
-
-  //row lines
   let startingY = 0;
   for (let i = 0; i < boardSize; i++) {
+    drawColLine(startingX, 0, 450)
     drawRowLine(startingY, 0, 450)
-    startingY += blockSize; 
+    startingX += blockSize; 
+    startingY += blockSize;
   }
-
 
   //white corner boxes
   context.fillStyle = "black";
