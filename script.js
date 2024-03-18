@@ -53,14 +53,7 @@ function update() {
   //board
   context.fillStyle = "lightgrey";
   context.fillRect(0, 0, board.width, board.height);
-  context.fillStyle = "white";
-  context.fillRect(0, 0, blockSize, blockSize);
-  context.fillRect(
-    (boardSize - 1) * blockSize,
-    (boardSize - 1) * blockSize,
-    blockSize,
-    blockSize
-  );
+  
 
   //target
   context.fillStyle = "deeppink";
@@ -71,31 +64,30 @@ function update() {
   context.fillStyle = "aquamarine";
   context.fillRect(meepleX, meepleY, blockSize, blockSize);
 
-  //first col line
-  drawColLine(0, 25, 450)
-
-  // middle col lines
-  let startingX = blockSize;
-  for (let i = 0; i < boardSize - 1; i++) {
+  //col lines
+  let startingX = 0;
+  for (let i = 0; i < boardSize; i++) {
     drawColLine(startingX, 0, 450)
     startingX += blockSize; 
   }
 
-  //last col line
-  drawColLine(450, 0, 425)
-
-  //first row line
-  drawRowLine(0, 25, 450);
-
-  //middle row lines
-  let startingY = blockSize;
-  for (let i = 0; i < boardSize - 1; i++) {
+  //row lines
+  let startingY = 0;
+  for (let i = 0; i < boardSize; i++) {
     drawRowLine(startingY, 0, 450)
     startingY += blockSize; 
   }
 
-  //last row line
-  drawRowLine(450, 0, 425);
+
+  //white corner boxes
+  context.fillStyle = "white";
+  context.fillRect(0, 0, blockSize, blockSize);
+  context.fillRect(
+    (boardSize - 1) * blockSize,
+    (boardSize - 1) * blockSize,
+    blockSize,
+    blockSize
+  );
 
 }
 
