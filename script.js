@@ -24,11 +24,8 @@ window.onload = function () {
 
   placeTarget();
   document.addEventListener("keyup", move);
-  update();
+  setInterval(update, 1000/10);
 };
-
-//draw line functions
-
 
 
 function update() {
@@ -67,7 +64,7 @@ function update() {
 
 
   //white corner boxes
-  context.fillStyle = "white";
+  context.fillStyle = "black";
   context.fillRect(0, 0, blockSize, blockSize);
   context.fillRect(
     (boardSize - 1) * blockSize,
@@ -78,6 +75,7 @@ function update() {
 
 }
 
+//draw line functions
 function drawColLine(x, startY, endY) {
   context.beginPath();
   context.moveTo(x, startY);
@@ -93,22 +91,19 @@ function drawRowLine(y, startX, endX) {
 }
 
 function move(e) {
-  // if (e.code == "ArrowUp" && velocityY != 1) {
-  //     velocityX  = 0;
-  //     velocityY  = -1;
-  // }
-  // else if (e.code == "ArrowDown" && velocityY != -1) {
-  //     velocityX  = 0;
-  //     velocityY  = +1;
-  // }
-  // else if (e.code == "ArrowLeft"  && velocityX != 1) {
-  //     velocityX  = -1;
-  //     velocityY  = 0;
-  // }
-  // else if (e.code == "ArrowRight"  && velocityX != -1) {
-  //     velocityX  = 1;
-  //     velocityY  = 0;
-  // }
+  if (e.code == "ArrowUp") {
+    meepleY = 0;
+  }
+  else if (e.code == "ArrowDown") {
+    meepleY = (boardSize - 1) * blockSize;
+  }
+  else if (e.code == "ArrowLeft") {
+    meepleX = 0;
+  }
+  else if (e.code == "ArrowRight") {
+    meepleX = (boardSize - 1) * blockSize;
+  }
+  
 }
 
 function placeTarget() {
