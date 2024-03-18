@@ -15,6 +15,8 @@ let targetY;
 //gameover
 let gameOver = false;
 
+
+
 window.onload = function () {
   board = document.getElementById("board");
   board.height = boardSize * blockSize;
@@ -127,12 +129,14 @@ function drawCircle(color, x, y, r, div) {
 
 //movement
 function move(e) {
+  
+  let boundaries = calculateLimits();
   switch (e.code) {
     case "ArrowUp":
-      meepleY = (meepleX == 0) ? blockSize : 0;
+      meepleY = (meepleX == 0) ? blockSize : boundaries.upper * blockSize;
       break;
     case "ArrowDown":
-      meepleY = (meepleX == (boardSize - 1) * blockSize) ? (boardSize - 2) * blockSize : (boardSize - 1) * blockSize;
+      meepleY = (meepleX == (boardSize - 1) * blockSize) ? (boardSize - 2) * blockSize : boundaries.lower * blockSize;
       break;
     case "ArrowLeft":
       meepleX = (meepleY == 0) ? blockSize : 0;
@@ -141,6 +145,27 @@ function move(e) {
       meepleX = (meepleY == (boardSize - 1) * blockSize) ? (boardSize - 2) * blockSize : (boardSize - 1) * blockSize;
       break;
   }
+}
+
+// I need to refactor some code so that we only multiply through blocksize when we want to draw
+// the meeple. All calculations should be done on a zero-indexed set of rows/columns. this will
+// need to start up at the initial meepleX/meepleY declarations at the top of that file.
+
+function calculateLimits() {
+  let limits = {upper:0, lower:boardSize - 1, left:0, right:boardSize - 1};
+  for (let i = 0; i < boardStructure.length; i++) {
+    let wall = boardStructure[i];
+    if (!wall.row && wall.existson == meepleX / blockSize) {
+      if (wall.after > limits.upper && wall.after < meepleY / blockSize) {
+        limits.upper = wall.after + 1;
+      }
+      if (wall.after < limits.lower && wall.after > meepleY / blockSize) {
+        limits.lower = wall.after;
+        console.log(limits)
+      }
+    }
+  }
+  return limits;
 }
 
 //randomise target
