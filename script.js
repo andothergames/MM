@@ -3,6 +3,11 @@ const blockSize = 25;
 const boardSize = 18;
 let board;
 let context;
+let boardStructure = [{row:true,existson:1,after:2},
+                      {row:true,existson:0,after:14},
+                      {row:true,existson:10,after:0},
+                      {row:true,existson:14,after:16},
+                      {row:true,existson:2,after:3}];
 
 //meeple
 let meepleX = blockSize * 5;
@@ -55,7 +60,10 @@ function update() {
     startingY += blockSize;
   }
 
-  //white corner boxes
+  drawWalls();
+
+
+  //black corner boxes
   context.fillStyle = "black";
   context.fillRect(0, 0, blockSize, blockSize);
   context.fillRect(
@@ -64,12 +72,28 @@ function update() {
     blockSize,
     blockSize
   );
+
+}
+
+function drawWalls() {
+  context.lineWidth=3;
+  context.strokeStyle = "blue";
+    for (let i = 0; i < boardStructure.length; i++) {
+      context.beginPath();
+      context.moveTo((boardStructure[i].after + 1) * blockSize, boardStructure[i].existson * blockSize);
+      context.lineTo((boardStructure[i].after + 1) * blockSize, (boardStructure[i].existson + 1) * blockSize);
+      context.closePath();
+      context.stroke();
+    }
+
 }
 
 //FUNCTIONS
 
 //gridlines
 function drawColLine(x, startY, endY) {
+  context.lineWidth=1;
+  context.strokeStyle = "black";
   context.beginPath();
   context.moveTo(x, startY);
   context.lineTo(x, endY);
@@ -77,6 +101,8 @@ function drawColLine(x, startY, endY) {
 }
 
 function drawRowLine(y, startX, endX) {
+  context.lineWidth=1;
+  context.strokeStyle = "black";
   context.beginPath();
   context.moveTo(startX, y);
   context.lineTo(endX, y);
