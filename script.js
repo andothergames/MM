@@ -1,21 +1,8 @@
-// import { boardStructure } from "./board";
-
 //board
 const blockSize = 25;
 const boardSize = 18;
 let board;
 let context;
-let boardStructure = [{row:true,existson:1,after:2},
-                      {row:true,existson:0,after:14},
-                      {row:true,existson:10,after:0},
-                      {row:true,existson:14,after:16},
-                      {row:true,existson:2,after:3},
-                      {row:false,existson:0,after:2},
-                      {row:false,existson:5,after:5},
-                      {row:true,existson:5,after:5},
-                      {row:false,existson:0,after:4},
-                      {row:false,existson:10,after:5},
-                      {row:false,existson:0,after:6}];
 
 //meeple
 let meepleX = blockSize * 5;
