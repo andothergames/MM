@@ -41,8 +41,20 @@ function update() {
 
   //target
   context.fillStyle = "deeppink";
-  context.fillRect(targetX, targetY, blockSize, blockSize);
-  // context.arc(targetX, targetY, 50, 0, 2 * Math.PI);
+  context.beginPath();
+  context.arc(targetX + 12.5, targetY + 12.5, blockSize / 2, 0, 2 * Math.PI);
+  context.fill();
+  
+  context.fillStyle = "white";
+  context.beginPath();
+  context.arc(targetX + 12.5, targetY + 12.5, blockSize / 3, 0, 2 * Math.PI);
+  context.fill();
+
+  context.fillStyle = "deeppink";
+  context.beginPath();
+  context.arc(targetX + 12.5, targetY + 12.5, blockSize / 5, 0, 2 * Math.PI);
+  context.fill();
+
 
   //meeple
   context.fillStyle = "aquamarine";
