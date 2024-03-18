@@ -45,6 +45,13 @@ function update() {
   context.fillStyle = "aquamarine";
   context.fillRect(meepleX, meepleY, blockSize, blockSize);
 
+  //warp points
+  drawCircle("cornflowerblue", (3 * blockSize), (3 * blockSize), blockSize, 4);
+  drawCircle("cornflowerblue", (7 * blockSize), (7 * blockSize), blockSize, 4);
+  drawCircle("cornflowerblue", (10 * blockSize), (10 * blockSize), blockSize, 4);
+  drawCircle("cornflowerblue", (14 * blockSize), (14 * blockSize), blockSize, 4);
+
+
   //gridlines
   let startingX = 0;
   let startingY = 0;
