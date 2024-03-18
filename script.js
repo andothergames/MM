@@ -103,29 +103,19 @@ function drawRowLine(y, startX, endX) {
 }
 
 function move(e) {
-  if (e.code == "ArrowUp" && meepleX == 0) {
-    meepleY = blockSize;
-  }
-  else if (e.code == "ArrowUp") {
-    meepleY = 0;
-  }
-  else if (e.code == "ArrowDown" && meepleX == (boardSize - 1) * blockSize) {
-    meepleY = (boardSize - 2) * blockSize;
-  }
-  else if (e.code == "ArrowDown") {
-    meepleY = (boardSize - 1) * blockSize;
-  }
-  else if (e.code == "ArrowLeft" && meepleY == 0) {
-    meepleX = blockSize;
-  }
-  else if (e.code == "ArrowLeft") {
-    meepleX = 0;
-  }
-  else if (e.code == "ArrowRight" && meepleY == (boardSize - 1) * blockSize) {
-    meepleX = (boardSize - 2) * blockSize;
-  }
-  else if (e.code == "ArrowRight") {
-    meepleX = (boardSize - 1) * blockSize;
+  switch (e.code) {
+    case "ArrowUp":
+      meepleY = (meepleX == 0) ? blockSize : 0;
+      break;
+    case "ArrowDown":
+      meepleY = (meepleX == (boardSize - 1) * blockSize) ? (boardSize - 2) * blockSize : (boardSize - 1) * blockSize;
+      break;
+    case "ArrowLeft":
+      meepleX = (meepleY == 0) ? blockSize : 0;
+      break;
+    case "ArrowRight":
+      meepleX = (meepleY == (boardSize - 1) * blockSize) ? (boardSize - 2) * blockSize : (boardSize - 1) * blockSize;
+      break;
   }
   
 }
