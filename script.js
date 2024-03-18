@@ -93,14 +93,19 @@ function drawCircle(color, x, y, r, div) {
 
 //movement
 function move(e) {
-  if (e.code == "ArrowUp") {
-    meepleY = 0;
-  } else if (e.code == "ArrowDown") {
-    meepleY = (boardSize - 1) * blockSize;
-  } else if (e.code == "ArrowLeft") {
-    meepleX = 0;
-  } else if (e.code == "ArrowRight") {
-    meepleX = (boardSize - 1) * blockSize;
+  switch (e.code) {
+    case "ArrowUp":
+      meepleY = (meepleX == 0) ? blockSize : 0;
+      break;
+    case "ArrowDown":
+      meepleY = (meepleX == (boardSize - 1) * blockSize) ? (boardSize - 2) * blockSize : (boardSize - 1) * blockSize;
+      break;
+    case "ArrowLeft":
+      meepleX = (meepleY == 0) ? blockSize : 0;
+      break;
+    case "ArrowRight":
+      meepleX = (meepleY == (boardSize - 1) * blockSize) ? (boardSize - 2) * blockSize : (boardSize - 1) * blockSize;
+      break;
   }
 }
 
