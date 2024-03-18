@@ -3,6 +3,11 @@ var blockSize = 25;
 var boardSize = 18;
 var board;
 var context;
+var boardStructure = [{row:true,existson:1,after:2},
+                      {row:true,existson:0,after:14},
+                      {row:true,existson:10,after:0},
+                      {row:true,existson:14,after:16},
+                      {row:true,existson:2,after:3}];
 
 //meeple
 var meepleX = blockSize * 5;
@@ -41,20 +46,8 @@ function update() {
 
   //target
   context.fillStyle = "deeppink";
-  context.beginPath();
-  context.arc(targetX + 12.5, targetY + 12.5, blockSize / 2, 0, 2 * Math.PI);
-  context.fill();
-  
-  context.fillStyle = "white";
-  context.beginPath();
-  context.arc(targetX + 12.5, targetY + 12.5, blockSize / 3, 0, 2 * Math.PI);
-  context.fill();
-
-  context.fillStyle = "deeppink";
-  context.beginPath();
-  context.arc(targetX + 12.5, targetY + 12.5, blockSize / 5, 0, 2 * Math.PI);
-  context.fill();
-
+  context.fillRect(targetX, targetY, blockSize, blockSize);
+  // context.arc(targetX, targetY, 50, 0, 2 * Math.PI);
 
   //meeple
   context.fillStyle = "aquamarine";
@@ -74,8 +67,10 @@ function update() {
     startingY += blockSize; 
   }
 
+  drawWalls();
 
-  //white corner boxes
+
+  //black corner boxes
   context.fillStyle = "black";
   context.fillRect(0, 0, blockSize, blockSize);
   context.fillRect(
@@ -87,8 +82,25 @@ function update() {
 
 }
 
+// var boardStructure = [{row:true,existson:1,between:[2,3]}];
+
+function drawWalls() {
+  context.lineWidth=3;
+  context.strokeStyle = "blue";
+    for (let i = 0; i < boardStructure.length; i++) {
+      context.beginPath();
+      context.moveTo((boardStructure[i].after + 1) * blockSize, boardStructure[i].existson * blockSize);
+      context.lineTo((boardStructure[i].after + 1) * blockSize, (boardStructure[i].existson + 1) * blockSize);
+      context.closePath();
+      context.stroke();
+    }
+
+}
+
 //draw line functions
 function drawColLine(x, startY, endY) {
+  context.lineWidth=1;
+  context.strokeStyle = "black";
   context.beginPath();
   context.moveTo(x, startY);
   context.lineTo(x, endY);
@@ -96,6 +108,8 @@ function drawColLine(x, startY, endY) {
 }
 
 function drawRowLine(y, startX, endX) {
+  context.lineWidth=1;
+  context.strokeStyle = "black";
   context.beginPath();
   context.moveTo(startX, y);
   context.lineTo(endX, y);
@@ -115,7 +129,6 @@ function move(e) {
   else if (e.code == "ArrowRight") {
     meepleX = (boardSize - 1) * blockSize;
   }
-  
 }
 
 function placeTarget() {
