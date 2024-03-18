@@ -1,3 +1,5 @@
+// import { boardStructure } from "./board";
+
 //board
 const blockSize = 25;
 const boardSize = 18;

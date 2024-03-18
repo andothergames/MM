@@ -1,4 +1,4 @@
-let boardStructure = [{row:true,existson:1,after:2},
+export let boardStructure = [{row:true,existson:1,after:2},
     {row:true,existson:0,after:4},
     {row:true,existson:0,after:12},
     {row:true,existson:1,after:2},
