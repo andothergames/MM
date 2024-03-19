@@ -9,12 +9,12 @@ class Meeple {
     }
 }
 
-let meepleGreen = new Meeple('forrestjump', 'aquamarine', 9, 9, false, false);
-let meepleGrey = new Meeple('ozzymosis', 'lightslategrey', 7, 7, false, false);
-let meepleBlue = new Meeple('bluebeamer', 'dodgerBlue', 10, 10, false, false);
-let meepleBrown = new Meeple('shortstop', 'tan', 12, 12, false, false);
-let meepleRed = new Meeple('sidestep', 'hotpink', 16, 16, false, false);
-let meepleWhite = new Meeple('skewt', 'ghostwhite', 14, 14, false, false);
-let meepleYellow = new Meeple('mcedge', 'yellow', 5, 5, false, false);
-let meepleBlack = new Meeple('carbon', 'darkslategrey', 3, 3, false, false);
+let meepleGreen = new Meeple('forrestjump', 'aquamarine', 8, 8, false, false);
+let meepleGrey = new Meeple('ozzymosis', 'lightslategrey', 6, 6, false, false);
+let meepleBlue = new Meeple('bluebeamer', 'dodgerBlue', 9, 9, false, false);
+let meepleBrown = new Meeple('shortstop', 'tan', 11, 11, false, false);
+let meepleRed = new Meeple('sidestep', 'hotpink', 15, 15, false, false);
+let meepleWhite = new Meeple('skewt', 'ghostwhite', 13, 13, false, false);
+let meepleYellow = new Meeple('mcedge', 'yellow', 4, 4, false, false);
+let meepleBlack = new Meeple('carbon', 'darkslategrey', 2, 2, false, false);
 

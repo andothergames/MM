@@ -4,6 +4,9 @@ const boardSize = 18;
 let board;
 let context;
 
+//meeples
+const meeples = [meepleGreen, meepleGrey, meepleBlue, meepleBrown, meepleRed, meepleWhite, meepleYellow, meepleBlack ];
+
 //meeple
 let meepleX = 2;
 let meepleY = 2;
@@ -14,7 +17,6 @@ let targetY;
 
 //gameover
 let gameOver = false;
-
 
 
 window.onload = function () {
@@ -49,12 +51,12 @@ function update() {
   drawCircle("white", targetX, targetY, blockSize, 3);
   drawCircle("deeppink", targetX, targetY, blockSize, 5);
 
-  //carbon meeple
-  context.fillStyle = "darkslategrey";
-  context.fillRect(meepleX * blockSize, meepleY * blockSize, blockSize, blockSize);
+  //draw meeples
 
-  
-
+  for (let i = 0; i < meeples.length; i++) {
+    context.fillStyle = meeples[i].color;
+    context.fillRect(meeples[i].xPos * blockSize, meeples[i].yPos * blockSize, blockSize, blockSize);
+  }
 
   //gridlines
   let startingX = 0;
