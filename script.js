@@ -253,6 +253,8 @@ function move(e) {
 
 function calculateLimits() {
   let m = findActive();
+  let r = m.yPos;
+  let c = m.xPos;
   let limits = {
     upper: 0,
     lower: boardSize - 1,
@@ -266,6 +268,7 @@ function calculateLimits() {
 
   for (let i = 0; i < boardStructure.length; i++) {
     let wall = boardStructure[i];
+    //columns
     if (!wall.row && wall.existson == m.xPos) {
       if (wall.after >= limits.upper && wall.after < m.yPos) {
         limits.upper = wall.after + 1;
@@ -274,6 +277,8 @@ function calculateLimits() {
         limits.lower = wall.after;
       }
     }
+
+    //rows
     if (wall.row && wall.existson == m.yPos) {
       if (wall.after >= limits.left && wall.after < m.xPos) {
         limits.left = wall.after + 1;
@@ -283,6 +288,32 @@ function calculateLimits() {
       }
     }
   }
+
+  for (let i = 0; i < meeples.length; i++) {
+    if (!meeples[i].isActive) {
+      //columns
+      if (meeples[i].xPos === c) {
+      if (meeples[i].yPos > limits.upper && meeples[i].yPos < r) {
+        limits.upper = meeples[i].yPos + 1;
+      }
+      if (meeples[i].yPos <= limits.lower && meeples[i].yPos > r) {
+        limits.lower = meeples[i].yPos - 1;
+      }
+    }
+     //rows
+    if (meeples[i].yPos === r) {
+
+      if (meeples[i].xPos >= limits.left && meeples[i].xPos < c) {
+        limits.left = meeples[i].xPos + 1;
+      }
+      if (meeples[i].xPos <= limits.right && meeples[i].xPos > c) {
+        limits.right = meeples[i].xPos - 1;
+      }
+    }    
+  }
+  }
+  console.log(limits);
+  
   return limits;
 }
 
