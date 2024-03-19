@@ -195,50 +195,64 @@ function drawCircle(color, x, y, r, div) {
 
 //movement
 function move(e) {
+  let m;
+
+  for (let i = 0; i < meeples.length; i++) {
+    if (meeples[i].isActive) {
+      m = meeples[i];
+    }
+  }
+
   let boundaries = calculateLimits();
   switch (e.code) {
     case "ArrowUp":
-      meepleY = boundaries.upper;
+      m.yPos = boundaries.upper;
       break;
     case "ArrowDown":
-      meepleY = boundaries.lower;
+      m.yPos = boundaries.lower;
       break;
     case "ArrowLeft":
-      meepleX = boundaries.left;
+      m.xPos = boundaries.left;
       break;
     case "ArrowRight":
-      meepleX = boundaries.right;
+      m.xPos = boundaries.right;
       break;
   }
 }
 
 function calculateLimits() {
+  let m;
+  for (let i = 0; i < meeples.length; i++) {
+    if (meeples[i].isActive) {
+      m = meeples[i];
+    }
+  }
   let limits = {
     upper: 0,
     lower: boardSize - 1,
     left: 0,
     right: boardSize - 1,
   };
-  if (meepleX == 0) limits.upper = 1;
-  if (meepleX == boardSize - 1) limits.lower = boardSize - 2;
-  if (meepleY == 0) limits.left = 1;
-  if (meepleY == boardSize - 1) limits.right = boardSize - 2;
+  if (m.xPos == 0) limits.upper = 1;
+  if (m.xPos == boardSize - 1) limits.lower = boardSize - 2;
+  if (m.yPos == 0) limits.left = 1;
+  if (m.yPos == boardSize - 1) limits.right = boardSize - 2;
 
   for (let i = 0; i < boardStructure.length; i++) {
     let wall = boardStructure[i];
-    if (!wall.row && wall.existson == meepleX) {
-      if (wall.after >= limits.upper && wall.after < meepleY) {
+    if (!wall.row && wall.existson == m.xPos) {
+      if (wall.after >= limits.upper && wall.after < m.yPos) {
         limits.upper = wall.after + 1;
       }
-      if (wall.after < limits.lower && wall.after >= meepleY) {
+      if (wall.after < limits.lower && wall.after >= m.yPos) {
         limits.lower = wall.after;
       }
     }
-    if (wall.row && wall.existson == meepleY) {
-      if (wall.after >= limits.left && wall.after < meepleX) {
+    if (wall.row && wall.existson == m.yPos) {
+      if (wall.after >= limits.left && wall.after < m.xPos) {
         limits.left = wall.after + 1;
       }
-      if (wall.after < limits.right && wall.after >= meepleX) {
+      if (wall.after < limits.right && wall.after >= m.xPos) {
         limits.right = wall.after;
       }
     }
@@ -256,8 +270,5 @@ function placeTarget() {
 function activeMeeple(m) {
   for (let i = 0; i < meeples.length; i++) {
     meeples[i].isActive = (m === meeples[i]);
-  }
-  console.log(m.isActive);
-
-  
+  }  
 }
