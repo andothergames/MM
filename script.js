@@ -252,13 +252,12 @@ function placeTarget() {
   targetY = Math.floor(Math.random() * boardSize) * blockSize;
 }
 
+//activeMeeples
 function activeMeeple(m) {
-  console.log(m.isActive);
   for (let i = 0; i < meeples.length; i++) {
     if (m === meeples[i]) {
       m.isActive = true;
     }
     m.isActive = false;
   }
-  return m.isActive;
 }
