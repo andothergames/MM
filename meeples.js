@@ -7,10 +7,6 @@ class Meeple {
         this.isActive = isActive
         this.abilityUsed = abilityUsed
     }
-
-    // isActive() {
-    //     Meeple.isActive = true;
-    // }
 }
 
 let meepleGreen = new Meeple('forrestjump', 'aquamarine', 8, 8, false, false);
@@ -21,4 +17,3 @@ let meepleRed = new Meeple('sidestep', 'hotpink', 15, 15, false, false);
 let meepleWhite = new Meeple('skewt', 'ghostwhite', 13, 13, false, false);
 let meepleYellow = new Meeple('mcedge', 'yellow', 4, 4, false, false);
 let meepleBlack = new Meeple('carbon', 'darkslategrey', 2, 2, false, false);
-
