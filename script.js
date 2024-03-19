@@ -5,8 +5,8 @@ let board;
 let context;
 
 //meeple
-let meepleX = blockSize * 5;
-let meepleY = blockSize * 5;
+let meepleX = 5;
+let meepleY = 5;
 
 //target
 let targetX;
@@ -45,7 +45,7 @@ function update() {
 
   //meeple
   context.fillStyle = "aquamarine";
-  context.fillRect(meepleX, meepleY, blockSize, blockSize);
+  context.fillRect(meepleX * blockSize, meepleY * blockSize, blockSize, blockSize);
 
   //warp points
   drawCircle("cornflowerblue", (3 * blockSize), (3 * blockSize), blockSize, 4);
@@ -58,8 +58,8 @@ function update() {
   let startingX = 0;
   let startingY = 0;
   for (let i = 0; i < boardSize; i++) {
-    drawColLine(startingX, 0, 450);
-    drawRowLine(startingY, 0, 450);
+    drawColLine(startingX, 0, blockSize * boardSize);
+    drawRowLine(startingY, 0, blockSize * boardSize);
     startingX += blockSize;
     startingY += blockSize;
   }
@@ -133,35 +133,44 @@ function move(e) {
   let boundaries = calculateLimits();
   switch (e.code) {
     case "ArrowUp":
-      meepleY = (meepleX == 0) ? blockSize : boundaries.upper * blockSize;
+      meepleY = boundaries.upper;
       break;
     case "ArrowDown":
-      meepleY = (meepleX == (boardSize - 1) * blockSize) ? (boardSize - 2) * blockSize : boundaries.lower * blockSize;
+      meepleY = boundaries.lower;
       break;
     case "ArrowLeft":
-      meepleX = (meepleY == 0) ? blockSize : 0;
+      meepleX = boundaries.left;
       break;
     case "ArrowRight":
-      meepleX = (meepleY == (boardSize - 1) * blockSize) ? (boardSize - 2) * blockSize : (boardSize - 1) * blockSize;
+      meepleX = boundaries.right;
       break;
   }
 }
 
-// I need to refactor some code so that we only multiply through blocksize when we want to draw
-// the meeple. All calculations should be done on a zero-indexed set of rows/columns. this will
-// need to start up at the initial meepleX/meepleY declarations at the top of that file.
-
 function calculateLimits() {
   let limits = {upper:0, lower:boardSize - 1, left:0, right:boardSize - 1};
+  if (meepleX == 0) limits.upper = 1;
+  if (meepleX == boardSize - 1) limits.lower = boardSize - 2;
+  if (meepleY == 0) limits.left = 1;
+  if (meepleY == boardSize - 1) limits.right = boardSize - 2;
+  
+
   for (let i = 0; i < boardStructure.length; i++) {
     let wall = boardStructure[i];
-    if (!wall.row && wall.existson == meepleX / blockSize) {
-      if (wall.after > limits.upper && wall.after < meepleY / blockSize) {
+    if (!wall.row && wall.existson == meepleX) {
+      if (wall.after >= limits.upper && wall.after < meepleY) {
         limits.upper = wall.after + 1;
       }
-      if (wall.after < limits.lower && wall.after > meepleY / blockSize) {
+      if (wall.after < limits.lower && wall.after >= meepleY) {
         limits.lower = wall.after;
-        console.log(limits)
+      }
+    }
+    if (wall.row && wall.existson == meepleY) {
+      if (wall.after >= limits.left && wall.after < meepleX) {
+        limits.left = wall.after + 1;
+      }
+      if (wall.after < limits.right && wall.after >= meepleX) {
+        limits.right = wall.after;
       }
     }
   }
