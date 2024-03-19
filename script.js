@@ -5,8 +5,8 @@ let board;
 let context;
 
 //meeple
-let meepleX = blockSize * 2;
-let meepleY = blockSize * 2;
+let meepleX = 2;
+let meepleY = 2;
 
 //target
 let targetX;
@@ -51,7 +51,7 @@ function update() {
 
   //carbon meeple
   context.fillStyle = "darkslategrey";
-  context.fillRect(meepleX, meepleY, blockSize, blockSize);
+  context.fillRect(meepleX * blockSize, meepleY * blockSize, blockSize, blockSize);
 
   
 
