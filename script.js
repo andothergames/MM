@@ -255,9 +255,9 @@ function placeTarget() {
 //activeMeeples
 function activeMeeple(m) {
   for (let i = 0; i < meeples.length; i++) {
-    if (m === meeples[i]) {
-      m.isActive = true;
-    }
-    m.isActive = false;
+    meeples[i].isActive = (m === meeples[i]);
   }
+  console.log(m.isActive);
+
+  
 }
