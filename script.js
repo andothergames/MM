@@ -293,7 +293,7 @@ function calculateLimits() {
     if (!meeples[i].isActive) {
       //columns
       if (meeples[i].xPos === c) {
-      if (meeples[i].yPos > limits.upper && meeples[i].yPos < r) {
+      if (meeples[i].yPos >= limits.upper && meeples[i].yPos < r) {
         limits.upper = meeples[i].yPos + 1;
       }
       if (meeples[i].yPos <= limits.lower && meeples[i].yPos > r) {
