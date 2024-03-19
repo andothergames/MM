@@ -58,6 +58,43 @@ buttonBlack.addEventListener("click", function () {
   activeMeeple(meepleBlack);
 });
 
+document.addEventListener("keypress", function (e) {
+  switch(e.code) {
+    case "Digit1":
+    case "Numpad1":
+      activeMeeple(meepleGreen);
+      break;
+    case "Digit2":
+    case "Numpad2":
+      activeMeeple(meepleGrey);
+      break;
+    case "Digit3":
+    case "Numpad3":
+      activeMeeple(meepleBlue);
+      break;
+    case "Digit4":
+    case "Numpad4":
+      activeMeeple(meepleBrown);
+      break;
+    case "Digit5":
+    case "Numpad5":
+      activeMeeple(meepleRed);
+      break;
+    case "Digit6":
+    case "Numpad6":
+      activeMeeple(meepleWhite);
+      break;
+    case "Digit7":
+    case "Numpad7":
+      activeMeeple(meepleYellow);
+      break;
+    case "Digit8":
+    case "Numpad8":
+      activeMeeple(meepleBlack);
+      break;
+  }
+});
+
 //meeple
 let meepleX = 2;
 let meepleY = 2;
