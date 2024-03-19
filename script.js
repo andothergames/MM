@@ -5,8 +5,8 @@ let board;
 let context;
 
 //meeple
-let meepleX = 5;
-let meepleY = 5;
+let meepleX = blockSize * 2;
+let meepleY = blockSize * 2;
 
 //target
 let targetX;
@@ -38,20 +38,22 @@ function update() {
   context.fillStyle = "lightgrey";
   context.fillRect(0, 0, board.width, board.height);
 
-  //target
-  drawCircle("deeppink", targetX, targetY, blockSize, 2);
-  drawCircle("white", targetX, targetY, blockSize, 3);
-  drawCircle("deeppink", targetX, targetY, blockSize, 5);
-
-  //meeple
-  context.fillStyle = "aquamarine";
-  context.fillRect(meepleX * blockSize, meepleY * blockSize, blockSize, blockSize);
-
   //warp points
   drawCircle("cornflowerblue", (3 * blockSize), (3 * blockSize), blockSize, 4);
   drawCircle("cornflowerblue", (7 * blockSize), (7 * blockSize), blockSize, 4);
   drawCircle("cornflowerblue", (10 * blockSize), (10 * blockSize), blockSize, 4);
   drawCircle("cornflowerblue", (14 * blockSize), (14 * blockSize), blockSize, 4);
+
+  //target
+  drawCircle("deeppink", targetX, targetY, blockSize, 2);
+  drawCircle("white", targetX, targetY, blockSize, 3);
+  drawCircle("deeppink", targetX, targetY, blockSize, 5);
+
+  //carbon meeple
+  context.fillStyle = "darkslategrey";
+  context.fillRect(meepleX, meepleY, blockSize, blockSize);
+
+  
 
 
   //gridlines
