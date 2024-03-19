@@ -195,13 +195,7 @@ function drawCircle(color, x, y, r, div) {
 
 //movement
 function move(e) {
-  let m;
-
-  for (let i = 0; i < meeples.length; i++) {
-    if (meeples[i].isActive) {
-      m = meeples[i];
-    }
-  }
+  let m = findActive();
 
   let boundaries = calculateLimits();
   switch (e.code) {
@@ -221,12 +215,7 @@ function move(e) {
 }
 
 function calculateLimits() {
-  let m;
-  for (let i = 0; i < meeples.length; i++) {
-    if (meeples[i].isActive) {
-      m = meeples[i];
-    }
-  }
+  let m = findActive();
   let limits = {
     upper: 0,
     lower: boardSize - 1,
@@ -265,6 +254,16 @@ function placeTarget() {
   targetX = Math.floor(Math.random() * boardSize) * blockSize;
   targetY = Math.floor(Math.random() * boardSize) * blockSize;
 }
+
+//findActiveMeeple
+function findActive() {
+  for (let i = 0; i < meeples.length; i++) {
+    if (meeples[i].isActive) {
+      return meeples[i];
+    }
+  }
+}
+
 
 //activeMeeples
 function activeMeeple(m) {
