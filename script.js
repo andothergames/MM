@@ -5,7 +5,58 @@ let board;
 let context;
 
 //meeples
-const meeples = [meepleGreen, meepleGrey, meepleBlue, meepleBrown, meepleRed, meepleWhite, meepleYellow, meepleBlack ];
+const meeples = [
+  meepleGreen,
+  meepleGrey,
+  meepleBlue,
+  meepleBrown,
+  meepleRed,
+  meepleWhite,
+  meepleYellow,
+  meepleBlack,
+];
+
+//buttons
+const buttonGreen = document.getElementById("forrestjump");
+const buttonGrey = document.getElementById("ozzymosis");
+const buttonBlue = document.getElementById("bluebeamer");
+const buttonBrown = document.getElementById("shortstop");
+const buttonRed = document.getElementById("sidestep");
+const buttonWhite = document.getElementById("skewt");
+const buttonYellow = document.getElementById("mcedge");
+const buttonBlack = document.getElementById("carbon");
+
+buttonGreen.addEventListener("click", function () {
+  activeMeeple(meepleGreen);
+});
+
+buttonGrey.addEventListener("click", function () {
+  activeMeeple(meepleGrey);
+});
+
+buttonBlue.addEventListener("click", function () {
+  activeMeeple(meepleBlue);
+});
+
+buttonBrown.addEventListener("click", function () {
+  activeMeeple(meepleBrown);
+});
+
+buttonRed.addEventListener("click", function () {
+  activeMeeple(meepleRed);
+});
+
+buttonWhite.addEventListener("click", function () {
+  activeMeeple(meepleWhite);
+});
+
+buttonYellow.addEventListener("click", function () {
+  activeMeeple(meepleYellow);
+});
+
+buttonBlack.addEventListener("click", function () {
+  activeMeeple(meepleBlack);
+});
 
 //meeple
 let meepleX = 2;
@@ -18,12 +69,11 @@ let targetY;
 //gameover
 let gameOver = false;
 
-
 window.onload = function () {
   board = document.getElementById("board");
   board.height = boardSize * blockSize;
   board.width = boardSize * blockSize;
-  context = board.getContext("2d"); //used for drawing on the board
+  context = board.getContext("2d");
 
   placeTarget();
   document.addEventListener("keyup", move);
@@ -36,15 +86,20 @@ function update() {
     return;
   }
 
+  //gamewin
+  if (targetX == meepleX && targetY == meepleY) {
+    alert("you win!");
+  }
+
   //board
   context.fillStyle = "lightgrey";
   context.fillRect(0, 0, board.width, board.height);
 
   //warp points
-  drawCircle("cornflowerblue", (3 * blockSize), (3 * blockSize), blockSize, 4);
-  drawCircle("cornflowerblue", (7 * blockSize), (7 * blockSize), blockSize, 4);
-  drawCircle("cornflowerblue", (10 * blockSize), (10 * blockSize), blockSize, 4);
-  drawCircle("cornflowerblue", (14 * blockSize), (14 * blockSize), blockSize, 4);
+  drawCircle("cornflowerblue", 3 * blockSize, 3 * blockSize, blockSize, 4);
+  drawCircle("cornflowerblue", 7 * blockSize, 7 * blockSize, blockSize, 4);
+  drawCircle("cornflowerblue", 10 * blockSize, 10 * blockSize, blockSize, 4);
+  drawCircle("cornflowerblue", 14 * blockSize, 14 * blockSize, blockSize, 4);
 
   //target
   drawCircle("deeppink", targetX, targetY, blockSize, 2);
@@ -52,10 +107,14 @@ function update() {
   drawCircle("deeppink", targetX, targetY, blockSize, 5);
 
   //draw meeples
-
   for (let i = 0; i < meeples.length; i++) {
     context.fillStyle = meeples[i].color;
-    context.fillRect(meeples[i].xPos * blockSize, meeples[i].yPos * blockSize, blockSize, blockSize);
+    context.fillRect(
+      meeples[i].xPos * blockSize,
+      meeples[i].yPos * blockSize,
+      blockSize,
+      blockSize
+    );
   }
 
   //gridlines
@@ -70,7 +129,6 @@ function update() {
 
   drawWalls();
 
-
   //black corner boxes
   context.fillStyle = "black";
   context.fillRect(0, 0, blockSize, blockSize);
@@ -80,33 +138,37 @@ function update() {
     blockSize,
     blockSize
   );
-
-}
-
-function drawWalls() {
-  context.lineWidth=3;
-  context.strokeStyle = "blue";
-    for (let i = 0; i < boardStructure.length; i++) {
-      wall = boardStructure[i];
-      context.beginPath();
-      if(wall.row) {
-        context.moveTo((wall.after + 1) * blockSize, wall.existson * blockSize);
-        context.lineTo((wall.after + 1) * blockSize, (wall.existson + 1) * blockSize);
-      } else {
-        context.moveTo(wall.existson * blockSize, (wall.after + 1) * blockSize);
-        context.lineTo((wall.existson + 1) * blockSize, (wall.after + 1) * blockSize);
-      }
-      context.closePath();
-      context.stroke();
-    }
-
 }
 
 //FUNCTIONS
 
+function drawWalls() {
+  context.lineWidth = 3;
+  context.strokeStyle = "blue";
+  for (let i = 0; i < boardStructure.length; i++) {
+    wall = boardStructure[i];
+    context.beginPath();
+    if (wall.row) {
+      context.moveTo((wall.after + 1) * blockSize, wall.existson * blockSize);
+      context.lineTo(
+        (wall.after + 1) * blockSize,
+        (wall.existson + 1) * blockSize
+      );
+    } else {
+      context.moveTo(wall.existson * blockSize, (wall.after + 1) * blockSize);
+      context.lineTo(
+        (wall.existson + 1) * blockSize,
+        (wall.after + 1) * blockSize
+      );
+    }
+    context.closePath();
+    context.stroke();
+  }
+}
+
 //gridlines
 function drawColLine(x, startY, endY) {
-  context.lineWidth=1;
+  context.lineWidth = 1;
   context.strokeStyle = "black";
   context.beginPath();
   context.moveTo(x, startY);
@@ -115,7 +177,7 @@ function drawColLine(x, startY, endY) {
 }
 
 function drawRowLine(y, startX, endX) {
-  context.lineWidth=1;
+  context.lineWidth = 1;
   context.strokeStyle = "black";
   context.beginPath();
   context.moveTo(startX, y);
@@ -123,7 +185,7 @@ function drawRowLine(y, startX, endX) {
   context.stroke();
 }
 
-//target circle
+//circles
 function drawCircle(color, x, y, r, div) {
   context.fillStyle = color;
   context.beginPath();
@@ -133,7 +195,6 @@ function drawCircle(color, x, y, r, div) {
 
 //movement
 function move(e) {
-  
   let boundaries = calculateLimits();
   switch (e.code) {
     case "ArrowUp":
@@ -152,12 +213,16 @@ function move(e) {
 }
 
 function calculateLimits() {
-  let limits = {upper:0, lower:boardSize - 1, left:0, right:boardSize - 1};
+  let limits = {
+    upper: 0,
+    lower: boardSize - 1,
+    left: 0,
+    right: boardSize - 1,
+  };
   if (meepleX == 0) limits.upper = 1;
   if (meepleX == boardSize - 1) limits.lower = boardSize - 2;
   if (meepleY == 0) limits.left = 1;
   if (meepleY == boardSize - 1) limits.right = boardSize - 2;
-  
 
   for (let i = 0; i < boardStructure.length; i++) {
     let wall = boardStructure[i];
@@ -185,4 +250,15 @@ function calculateLimits() {
 function placeTarget() {
   targetX = Math.floor(Math.random() * boardSize) * blockSize;
   targetY = Math.floor(Math.random() * boardSize) * blockSize;
+}
+
+function activeMeeple(m) {
+  console.log(m.isActive);
+  for (let i = 0; i < meeples.length; i++) {
+    if (m === meeples[i]) {
+      m.isActive = true;
+    }
+    m.isActive = false;
+  }
+  return m.isActive;
 }
