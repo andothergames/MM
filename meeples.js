@@ -1,5 +1,5 @@
 class Meeple {
-    constructor(name, color, xPos, yPos, isActive, abilityUsed) {
+    constructor(name, color, xPos, yPos, isActive, abilityUsed, reachedTarget) {
         this.name = name
         this.color = color
         this.xPos = xPos
