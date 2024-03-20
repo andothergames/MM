@@ -6,13 +6,10 @@
 }
 
 body {
-  min-width: 600px;
   font-family: "incons", monospace;
   text-align: center;
   color: white;
   background-color: black;
-  margin: 0px;
-  padding: 0px;
 }
 
 .controls {
@@ -35,28 +32,17 @@ button {
   height: 30px;
   border-radius: 6px;
   border: none;
+  cursor: pointer;
+  transition: transform 0.2s ease;
   font-family: "Ink Free", monospace;
 }
 
-.abutton,
-.mbutton {
-  cursor: pointer;
-  transition: transform 0.2s ease;
-}
-
-.abutton:hover,
-.mbutton:hover {
+button:hover {
   transform: scale(1.2);
 }
 
-.tbutton {
+.mbutton {
   margin-top: 20px;
-}
-
-.tbutton img {
-  opacity: 0.3;
-  width: 20px;
-  display: block;
 }
 
 .abutton {
