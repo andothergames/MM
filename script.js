@@ -36,70 +36,70 @@ const buttonYellowab = document.getElementById("mcedgeab");
 const buttonBlackab = document.getElementById("carbonab");
 
 buttonGreen.addEventListener("click", function () {
-  activeMeeple(meepleGreen);
+  activateMeeple(meepleGreen);
 });
 
 buttonGrey.addEventListener("click", function () {
-  activeMeeple(meepleGrey);
+  activateMeeple(meepleGrey);
 });
 
 buttonBlue.addEventListener("click", function () {
-  activeMeeple(meepleBlue);
+  activateMeeple(meepleBlue);
 });
 
 buttonBrown.addEventListener("click", function () {
-  activeMeeple(meepleBrown);
+  activateMeeple(meepleBrown);
 });
 
 buttonRed.addEventListener("click", function () {
-  activeMeeple(meepleRed);
+  activateMeeple(meepleRed);
 });
 
 buttonWhite.addEventListener("click", function () {
-  activeMeeple(meepleWhite);
+  activateMeeple(meepleWhite);
 });
 
 buttonYellow.addEventListener("click", function () {
-  activeMeeple(meepleYellow);
+  activateMeeple(meepleYellow);
 });
 
 buttonBlack.addEventListener("click", function () {
-  activeMeeple(meepleBlack);
+  activateMeeple(meepleBlack);
 });
 
 document.addEventListener("keypress", function (e) {
   switch(e.code) {
     case "Digit1":
     case "Numpad1":
-      activeMeeple(meepleGreen);
+      activateMeeple(meepleGreen);
       break;
     case "Digit2":
     case "Numpad2":
-      activeMeeple(meepleGrey);
+      activateMeeple(meepleGrey);
       break;
     case "Digit3":
     case "Numpad3":
-      activeMeeple(meepleBlue);
+      activateMeeple(meepleBlue);
       break;
     case "Digit4":
     case "Numpad4":
-      activeMeeple(meepleBrown);
+      activateMeeple(meepleBrown);
       break;
     case "Digit5":
     case "Numpad5":
-      activeMeeple(meepleRed);
+      activateMeeple(meepleRed);
       break;
     case "Digit6":
     case "Numpad6":
-      activeMeeple(meepleWhite);
+      activateMeeple(meepleWhite);
       break;
     case "Digit7":
     case "Numpad7":
-      activeMeeple(meepleYellow);
+      activateMeeple(meepleYellow);
       break;
     case "Digit8":
     case "Numpad8":
-      activeMeeple(meepleBlack);
+      activateMeeple(meepleBlack);
       break;
   }
 });
@@ -331,8 +331,8 @@ function findActive() {
 }
 
 
-//activeMeeples
-function activeMeeple(m) {
+//activateMeeples
+function activateMeeple(m) {
   for (let i = 0; i < meeples.length; i++) {
     meeples[i].isActive = (m === meeples[i]);
     meeples[i].isActive ? document.getElementById(meeples[i].name).classList.add('active') : document.getElementById(meeples[i].name).classList.remove('active')
@@ -346,6 +346,7 @@ function targetHit() {
   let y = active.yPos;
   return x === targetX && y === targetY;
 }
+
 //ability used style
 function abilityUsedStyle(m) {
   const meeplehtml = document.getElementById(`${m.name}ab`)
