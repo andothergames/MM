@@ -178,10 +178,10 @@ function update() {
 }
 
 //FUNCTIONS
-
+// 
 function drawWalls() {
   context.lineWidth = 3;
-  context.strokeStyle = "blue";
+  context.strokeStyle = "MidnightBlue";
   for (let i = 0; i < boardStructure.length; i++) {
     wall = boardStructure[i];
     context.beginPath();
