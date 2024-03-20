@@ -132,9 +132,9 @@ function update() {
   //gameover
   if (targetHit()) {
     const reachedMeeple = findActive()
-    reachedMeeple.abilityUsed = true;
+    reachedMeeple.targetReached = true;
     winningMeeples.push(reachedMeeple.name);
-    abilityUsedStyle(reachedMeeple)
+    reachedTargetStyle(reachedMeeple)
     win();
     placeTarget();
   }
@@ -364,10 +364,10 @@ function targetHit() {
   return x === targetX && y === targetY;
 }
 
-//ability used style
-function abilityUsedStyle(m) {
-  const meeplehtml = document.getElementById(`${m.name}ab`)
-  meeplehtml.innerText = '★';
+//target reached style
+function reachedTargetStyle(m) {
+  const meeplehtml = document.getElementById(`${m.name}t`)
+  meeplehtml.style.opacity = 1;
 }
 
 //winningDisplay
