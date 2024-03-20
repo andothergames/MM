@@ -370,6 +370,7 @@ function reachedTargetStyle(m) {
   meeplehtml.style.opacity = 1;
 }
 
+//testmerge
 //winningDisplay
 function win() {
   console.log(winningMeeples)
