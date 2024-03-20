@@ -365,13 +365,23 @@ function targetHit() {
   return x === targetX && y === targetY;
 }
 
-//ability used style
-function abilityUsedStyle(m) {
-  const meeplehtml = document.getElementById(`${m.name}ab`)
-  meeplehtml.innerText = '&starf';
+//target reached style
+function reachedTargetStyle(m) {
+  const meeplehtml = document.getElementById(`${m.name}t`)
+  meeplehtml.style.opacity = 1;
 }
 
 //testmerge
+//winningDisplay
+function win() {
+  console.log(winningMeeples)
+  if (winningMeeples.length === 6) {
+    gameOver = true
+    alert('you have won!')
+  }
+  return;
+}
+
 function tinkering() {
   board.addEventListener('click', function(e) {
     let x = Math.floor(e.offsetX / blockSize);
