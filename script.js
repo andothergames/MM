@@ -133,9 +133,9 @@ function update() {
   //gameover
   if (targetHit()) {
     const reachedMeeple = findActive()
-    reachedMeeple.targetReached = true;
+    reachedMeeple.abilityUsed = true;
     winningMeeples.push(reachedMeeple.name);
-    reachedTargetStyle(reachedMeeple)
+    abilityUsedStyle(reachedMeeple)
     win();
     placeTarget();
   }
@@ -368,7 +368,11 @@ function targetHit() {
 //ability used style
 function abilityUsedStyle(m) {
   const meeplehtml = document.getElementById(`${m.name}ab`)
+<<<<<<< HEAD
   meeplehtml.innerText = '&starf';
+=======
+  meeplehtml.innerText = '★';
+>>>>>>> parent of 46b852b (target image and reachedtarget function)
 }
 
 //testmerge
