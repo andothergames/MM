@@ -113,6 +113,7 @@ let gameOver = false;
 
 window.onload = function () {
   board = document.getElementById("board");
+  tinkering();
   board.height = boardSize * blockSize;
   board.width = boardSize * blockSize;
   context = board.getContext("2d");
@@ -351,4 +352,21 @@ function targetHit() {
 function abilityUsedStyle(m) {
   const meeplehtml = document.getElementById(`${m.name}ab`)
   meeplehtml.innerText = '&starf';
+}
+
+function tinkering() {
+  board.addEventListener('click', function(e) {
+    let x = Math.floor(e.offsetX / blockSize);
+    let y = Math.floor(e.offsetY / blockSize);
+    if (x === targetX && y === targetY) {
+      console.log("you hit the target");
+    }
+    for (let i = 0; i < meeples.length; i++) {
+      if (meeples[i].xPos === x && meeples[i].yPos === y) {
+        activateMeeple(meeples[i]);
+        break;
+      }
+    }
+    console.log(x + " - " + y);
+  })
 }
