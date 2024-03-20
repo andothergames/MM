@@ -371,6 +371,7 @@ function abilityUsedStyle(m) {
   meeplehtml.innerText = '&starf';
 }
 
+//testmerge
 function tinkering() {
   board.addEventListener('click', function(e) {
     let x = Math.floor(e.offsetX / blockSize);
