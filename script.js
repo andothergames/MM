@@ -95,10 +95,6 @@ document.addEventListener("keypress", function (e) {
   }
 });
 
-//meeple
-let meepleX = 2;
-let meepleY = 2;
-
 //target
 let targetX;
 let targetY;
@@ -119,13 +115,9 @@ window.onload = function () {
 
 function update() {
   //gameover
-  if (gameOver) {
-    return;
-  }
-
-  //gamewin
-  if (targetX == meepleX && targetY == meepleY) {
-    alert("you win!");
+  if (targetHit()) {
+    placeTarget();
+    console.log("hit");
   }
 
   //board
@@ -139,9 +131,9 @@ function update() {
   drawCircle("cornflowerblue", 14 * blockSize, 14 * blockSize, blockSize, 4);
 
   //target
-  drawCircle("deeppink", targetX, targetY, blockSize, 2);
-  drawCircle("white", targetX, targetY, blockSize, 3);
-  drawCircle("deeppink", targetX, targetY, blockSize, 5);
+  drawCircle("deeppink", targetX * blockSize, targetY * blockSize, blockSize, 2);
+  drawCircle("white", targetX * blockSize, targetY * blockSize, blockSize, 3);
+  drawCircle("deeppink", targetX * blockSize, targetY * blockSize, blockSize, 5);
 
   //draw meeples
   for (let i = 0; i < meeples.length; i++) {
@@ -312,15 +304,13 @@ function calculateLimits() {
     }    
   }
   }
-  console.log(limits);
-  
   return limits;
 }
 
 //randomise target
 function placeTarget() {
-  targetX = Math.floor(Math.random() * boardSize) * blockSize;
-  targetY = Math.floor(Math.random() * boardSize) * blockSize;
+  targetX = Math.floor(Math.random() * boardSize);
+  targetY = Math.floor(Math.random() * boardSize);
 }
 
 //findActiveMeeple
@@ -339,4 +329,12 @@ function activeMeeple(m) {
     meeples[i].isActive = (m === meeples[i]);
     meeples[i].isActive ? document.getElementById(meeples[i].name).classList.add('active') : document.getElementById(meeples[i].name).classList.remove('active')
   }  
+}
+
+function targetHit() {
+  let active = findActive();
+  if (active === undefined) return false;
+  let x = active.xPos;
+  let y = active.yPos;
+  return x === targetX && y === targetY;
 }
