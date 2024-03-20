@@ -349,3 +349,9 @@ function activeMeeple(m) {
     meeples[i].isActive ? document.getElementById(meeples[i].name).classList.add('active') : document.getElementById(meeples[i].name).classList.remove('active')
   }  
 }
+
+//ability used style
+function abilityUsedStyle(m) {
+  const meeplehtml = document.getElementById(`${m.name}ab`)
+  meeplehtml.innerText = '&starf';
+}
