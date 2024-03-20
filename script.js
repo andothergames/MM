@@ -360,6 +360,8 @@ function tinkering() {
     let y = Math.floor(e.offsetY / blockSize);
     if (x === targetX && y === targetY) {
       console.log("you hit the target");
+      let successSound = new Audio('success.mp3');
+      successSound.play();
     }
     for (let i = 0; i < meeples.length; i++) {
       if (meeples[i].xPos === x && meeples[i].yPos === y) {
