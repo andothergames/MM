@@ -116,6 +116,7 @@ let gameOver = false;
 
 window.onload = function () {
   board = document.getElementById("board");
+  tinkering();
   board.height = boardSize * blockSize;
   board.width = boardSize * blockSize;
   context = board.getContext("2d");
@@ -364,18 +365,27 @@ function targetHit() {
   return x === targetX && y === targetY;
 }
 
-//target reached style
-function reachedTargetStyle(m) {
-  const meeplehtml = document.getElementById(`${m.name}t`)
-  meeplehtml.style.opacity = 1;
+//ability used style
+function abilityUsedStyle(m) {
+  const meeplehtml = document.getElementById(`${m.name}ab`)
+  meeplehtml.innerText = '&starf';
 }
 
-//winningDisplay
-function win() {
-  console.log(winningMeeples)
-  if (winningMeeples.length === 6) {
-    gameOver = true
-    alert('you have won!')
-  }
-  return;
+function tinkering() {
+  board.addEventListener('click', function(e) {
+    let x = Math.floor(e.offsetX / blockSize);
+    let y = Math.floor(e.offsetY / blockSize);
+    if (x === targetX && y === targetY) {
+      console.log("you hit the target");
+      let successSound = new Audio('success.mp3');
+      successSound.play();
+    }
+    for (let i = 0; i < meeples.length; i++) {
+      if (meeples[i].xPos === x && meeples[i].yPos === y) {
+        activateMeeple(meeples[i]);
+        break;
+      }
+    }
+    console.log(x + " - " + y);
+  })
 }
