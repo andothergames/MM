@@ -127,15 +127,13 @@ window.onload = function () {
 };
 
 function update() {
-
-  //currentActiveMeeple
   
   //gameover
   if (targetHit()) {
     const reachedMeeple = findActive()
     reachedMeeple.abilityUsed = true;
     winningMeeples.push(reachedMeeple.name);
-    abilityUsedStyle(reachedMeeple)
+    reachedTargetStyle(reachedMeeple)
     win();
     placeTarget();
   }
@@ -371,7 +369,6 @@ function reachedTargetStyle(m) {
   meeplehtml.style.opacity = 1;
 }
 
-//testmerge
 //winningDisplay
 function win() {
   console.log(winningMeeples)

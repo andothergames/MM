@@ -32,17 +32,28 @@ button {
   height: 30px;
   border-radius: 6px;
   border: none;
-  cursor: pointer;
-  transition: transform 0.2s ease;
   font-family: "Ink Free", monospace;
 }
 
-button:hover {
+.abutton,
+.mbutton {
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.abutton:hover,
+.mbutton:hover {
   transform: scale(1.2);
 }
 
-.mbutton {
+.tbutton {
   margin-top: 20px;
+}
+
+.tbutton img {
+  opacity: 0.3;
+  width: 20px;
+  display: block;
 }
 
 .abutton {
