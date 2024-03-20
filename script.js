@@ -138,11 +138,6 @@ function update() {
   drawCircle("cornflowerblue", 10 * blockSize, 10 * blockSize, blockSize, 4);
   drawCircle("cornflowerblue", 14 * blockSize, 14 * blockSize, blockSize, 4);
 
-  //target
-  drawCircle("deeppink", targetX * blockSize, targetY * blockSize, blockSize, 2);
-  drawCircle("white", targetX * blockSize, targetY * blockSize, blockSize, 3);
-  drawCircle("deeppink", targetX * blockSize, targetY * blockSize, blockSize, 5);
-
   //draw meeples
   for (let i = 0; i < meeples.length; i++) {
     context.fillStyle = meeples[i].color;
@@ -153,6 +148,11 @@ function update() {
       blockSize
     );
   }
+
+  //target
+  drawCircle("deeppink", targetX * blockSize, targetY * blockSize, blockSize, 2);
+  drawCircle("white", targetX * blockSize, targetY * blockSize, blockSize, 3);
+  drawCircle("deeppink", targetX * blockSize, targetY * blockSize, blockSize, 5);
 
   //gridlines
   let startingX = 0;
