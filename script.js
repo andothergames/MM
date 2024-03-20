@@ -337,5 +337,6 @@ function findActive() {
 function activeMeeple(m) {
   for (let i = 0; i < meeples.length; i++) {
     meeples[i].isActive = (m === meeples[i]);
+    meeples[i].isActive ? document.getElementById(meeples[i].name).classList.add('active') : document.getElementById(meeples[i].name).classList.remove('active')
   }  
 }
