@@ -16,6 +16,9 @@ const meeples = [
   meepleBlack,
 ];
 
+//reachedTargetMeeples
+const winningMeeples = [];
+
 //buttons
 const buttonGreen = document.getElementById("forrestjump");
 const buttonGrey = document.getElementById("ozzymosis");
@@ -130,7 +133,9 @@ function update() {
   if (targetHit()) {
     const reachedMeeple = findActive()
     reachedMeeple.abilityUsed = true;
+    winningMeeples.push(reachedMeeple.name);
     abilityUsedStyle(reachedMeeple)
+    win();
     placeTarget();
   }
 
@@ -363,4 +368,14 @@ function targetHit() {
 function abilityUsedStyle(m) {
   const meeplehtml = document.getElementById(`${m.name}ab`)
   meeplehtml.innerText = '★';
+}
+
+//winningDisplay
+function win() {
+  console.log(winningMeeples)
+  if (winningMeeples.length === 6) {
+    gameOver = true
+    alert('you have won!')
+  }
+  return;
 }
