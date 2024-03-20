@@ -126,7 +126,6 @@ function update() {
   //gameover
   if (targetHit()) {
     placeTarget();
-    console.log("hit");
   }
 
   //board
@@ -227,7 +226,7 @@ function drawRowLine(y, startX, endX) {
 function drawCircle(color, x, y, r, div) {
   context.fillStyle = color;
   context.beginPath();
-  context.arc(x + 12.5, y + 12.5, r / div, 0, 2 * Math.PI);
+  context.arc(x + blockSize / 2, y + blockSize / 2, r / div, 0, 2 * Math.PI);
   context.fill();
 }
 
