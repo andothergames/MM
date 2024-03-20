@@ -123,8 +123,14 @@ window.onload = function () {
 };
 
 function update() {
+
+  //currentActiveMeeple
+  
   //gameover
   if (targetHit()) {
+    const reachedMeeple = findActive()
+    reachedMeeple.abilityUsed = true;
+    abilityUsedStyle(reachedMeeple)
     placeTarget();
   }
 
@@ -319,6 +325,11 @@ function calculateLimits() {
 function placeTarget() {
   targetX = Math.floor(Math.random() * boardSize);
   targetY = Math.floor(Math.random() * boardSize);
+  for (let i = 0; i < meeples.length; i++) {
+    if (meeples[i].xPos === targetX && meeples[i].yPos === targetY) {
+      placeTarget();
+    }
+  }  
 }
 
 //findActiveMeeple
@@ -342,6 +353,7 @@ function activateMeeple(m) {
 function targetHit() {
   let active = findActive();
   if (active === undefined) return false;
+  if (active.reachedTarget) return false;
   let x = active.xPos;
   let y = active.yPos;
   return x === targetX && y === targetY;
@@ -350,5 +362,5 @@ function targetHit() {
 //ability used style
 function abilityUsedStyle(m) {
   const meeplehtml = document.getElementById(`${m.name}ab`)
-  meeplehtml.innerText = '&starf';
+  meeplehtml.innerText = '★';
 }
