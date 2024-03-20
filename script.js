@@ -26,6 +26,15 @@ const buttonWhite = document.getElementById("skewt");
 const buttonYellow = document.getElementById("mcedge");
 const buttonBlack = document.getElementById("carbon");
 
+const buttonGreenab = document.getElementById("forrestjumpab");
+const buttonGreyab = document.getElementById("ozzymosisab");
+const buttonBlueab = document.getElementById("bluebeamerab");
+const buttonBrownab = document.getElementById("shortstopab");
+const buttonRedab = document.getElementById("sidestepab");
+const buttonWhiteab = document.getElementById("skewtab");
+const buttonYellowab = document.getElementById("mcedgeab");
+const buttonBlackab = document.getElementById("carbonab");
+
 buttonGreen.addEventListener("click", function () {
   activeMeeple(meepleGreen);
 });
