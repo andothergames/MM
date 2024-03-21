@@ -113,20 +113,17 @@ function update() {
 //FUNCTIONS
 // 
 function buttonSetUp() {
-  selectionButtons();
-}
+  for (let i = 0; i < game.meeples.length; i++) {
+    const selectionButton = document.getElementById(game.meeples[i].name);
+    const abilityButton = document.getElementById(`${game.meeples[i].name}ab`);
 
-function selectionButtons() {
-  // At the moment this relies on the fact that the meeples are added to their array
-  // in the same order as the buttons. if we want to change the order of these
-  // then this function needs to change a little bit to check for the correct meeple
-  // rather than blindly use the meeple at position i
-  let selectionButtons = document.getElementsByClassName("mbutton");
-  for (let i = 0; i < selectionButtons.length; i++) {
-    const b = document.getElementById(selectionButtons[i].id)
-    game.buttons.push(b);
-    b.addEventListener("click", function() {
+    selectionButton.addEventListener("click", function() {
       activateMeeple(game.meeples[i]);
+    })
+
+    abilityButton.addEventListener("click", function() {
+      activateMeeple(game.meeples[i]);
+      console.log('ability functionality will go here')
     })
   }
 }
