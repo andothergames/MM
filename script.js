@@ -71,7 +71,7 @@ buttonBlack.addEventListener("click", function () {
 });
 
 document.addEventListener("keypress", function (e) {
-  switch(e.code) {
+  switch (e.code) {
     case "Digit1":
     case "Numpad1":
       activateMeeple(meepleGreen);
@@ -107,6 +107,47 @@ document.addEventListener("keypress", function (e) {
   }
 });
 
+//space bar ability functionality
+let drawAb = false;
+
+document.addEventListener("keydown", function (e) {
+  console.log(e.code);
+  if (e.code == "Space") {
+
+    const m = findActive();
+    
+    if (m === undefined) {
+      alert("select an active meeple");
+    }
+
+    //draw ability squares on spacebar press
+    drawAb = true;
+
+    //if arrow keys used, abilityUsed to true
+    while (true) {
+      if (
+        e.code == "ArrowUp" ||
+        e.code == "ArrowDown" ||
+        e.code == "ArrowRight" ||
+        e.code == "ArrowLeft"
+      ) {
+        m.abilityUsed = true;
+        abilityUsedStyle(m);
+        drawAb = false;
+        console.log(m.abilityUsed);
+        break;
+      }
+
+      if (e.code == "Space" || e.code == "Escape") {
+        drawAb = false;
+        console.log(m);
+        console.log(m.abilityUsed);
+        break;
+      }
+    }
+  }
+});
+
 //target
 let targetX;
 let targetY;
@@ -127,13 +168,12 @@ window.onload = function () {
 };
 
 function update() {
-  
   //gameover
   if (targetHit()) {
-    const reachedMeeple = findActive()
+    const reachedMeeple = findActive();
     reachedMeeple.abilityUsed = true;
     winningMeeples.push(reachedMeeple.name);
-    reachedTargetStyle(reachedMeeple)
+    reachedTargetStyle(reachedMeeple);
     win();
     placeTarget();
   }
@@ -159,10 +199,26 @@ function update() {
     );
   }
 
+  //testing ability light up squares
+  const activeMeepleForAbility = findActive();
+  drawAbility(activeMeepleForAbility);
+
   //target
-  drawCircle("deeppink", targetX * blockSize, targetY * blockSize, blockSize, 2);
+  drawCircle(
+    "deeppink",
+    targetX * blockSize,
+    targetY * blockSize,
+    blockSize,
+    2
+  );
   drawCircle("white", targetX * blockSize, targetY * blockSize, blockSize, 3);
-  drawCircle("deeppink", targetX * blockSize, targetY * blockSize, blockSize, 5);
+  drawCircle(
+    "deeppink",
+    targetX * blockSize,
+    targetY * blockSize,
+    blockSize,
+    5
+  );
 
   //gridlines
   let startingX = 0;
@@ -188,7 +244,7 @@ function update() {
 }
 
 //FUNCTIONS
-// 
+//
 function drawWalls() {
   context.lineWidth = 3;
   context.strokeStyle = "MidnightBlue";
@@ -303,24 +359,23 @@ function calculateLimits() {
     if (!meeples[i].isActive) {
       //columns
       if (meeples[i].xPos === c) {
-      if (meeples[i].yPos >= limits.upper && meeples[i].yPos < r) {
-        limits.upper = meeples[i].yPos + 1;
+        if (meeples[i].yPos >= limits.upper && meeples[i].yPos < r) {
+          limits.upper = meeples[i].yPos + 1;
+        }
+        if (meeples[i].yPos <= limits.lower && meeples[i].yPos > r) {
+          limits.lower = meeples[i].yPos - 1;
+        }
       }
-      if (meeples[i].yPos <= limits.lower && meeples[i].yPos > r) {
-        limits.lower = meeples[i].yPos - 1;
+      //rows
+      if (meeples[i].yPos === r) {
+        if (meeples[i].xPos >= limits.left && meeples[i].xPos < c) {
+          limits.left = meeples[i].xPos + 1;
+        }
+        if (meeples[i].xPos <= limits.right && meeples[i].xPos > c) {
+          limits.right = meeples[i].xPos - 1;
+        }
       }
     }
-     //rows
-    if (meeples[i].yPos === r) {
-
-      if (meeples[i].xPos >= limits.left && meeples[i].xPos < c) {
-        limits.left = meeples[i].xPos + 1;
-      }
-      if (meeples[i].xPos <= limits.right && meeples[i].xPos > c) {
-        limits.right = meeples[i].xPos - 1;
-      }
-    }    
-  }
   }
   return limits;
 }
@@ -333,7 +388,7 @@ function placeTarget() {
     if (meeples[i].xPos === targetX && meeples[i].yPos === targetY) {
       placeTarget();
     }
-  }  
+  }
 }
 
 //findActiveMeeple
@@ -345,13 +400,14 @@ function findActive() {
   }
 }
 
-
 //activateMeeples
 function activateMeeple(m) {
   for (let i = 0; i < meeples.length; i++) {
-    meeples[i].isActive = (m === meeples[i]);
-    meeples[i].isActive ? document.getElementById(meeples[i].name).classList.add('active') : document.getElementById(meeples[i].name).classList.remove('active')
-  }  
+    meeples[i].isActive = m === meeples[i];
+    meeples[i].isActive
+      ? document.getElementById(meeples[i].name).classList.add("active")
+      : document.getElementById(meeples[i].name).classList.remove("active");
+  }
 }
 
 function targetHit() {
@@ -365,27 +421,45 @@ function targetHit() {
 
 //target reached style
 function reachedTargetStyle(m) {
-  const meeplehtml = document.getElementById(`${m.name}t`)
+  const meeplehtml = document.getElementById(`${m.name}t`);
   meeplehtml.style.opacity = 1;
+}
+
+//ability used style
+function abilityUsedStyle(m) {
+  const meeplehtml = document.getElementById(`${m.name}ab`);
+  meeplehtml.innerText = "★";
+}
+
+function drawAbility(m) {
+  if (drawAb) {
+    context.fillStyle = "pink";
+    context.fillRect(
+      (m.xPos + 1) * blockSize,
+      m.yPos * blockSize,
+      blockSize,
+      blockSize
+    );
+  }
 }
 
 //winningDisplay
 function win() {
-  console.log(winningMeeples)
+  console.log(winningMeeples);
   if (winningMeeples.length === 6) {
-    gameOver = true
-    alert('you have won!')
+    gameOver = true;
+    alert("you have won!");
   }
   return;
 }
 
 function tinkering() {
-  board.addEventListener('click', function(e) {
+  board.addEventListener("click", function (e) {
     let x = Math.floor(e.offsetX / blockSize);
     let y = Math.floor(e.offsetY / blockSize);
     if (x === targetX && y === targetY) {
       console.log("you hit the target");
-      let successSound = new Audio('success.mp3');
+      let successSound = new Audio("success.mp3");
       successSound.play();
     }
     for (let i = 0; i < meeples.length; i++) {
@@ -395,5 +469,5 @@ function tinkering() {
       }
     }
     console.log(x + " - " + y);
-  })
+  });
 }
