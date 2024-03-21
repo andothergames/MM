@@ -80,7 +80,7 @@ function initialise() {
   context = board.getContext("2d");
   calculateTargetPosition();
   document.addEventListener("keyup", move);
-  setInterval(update, 1000 / 10);
+  update();
 }
 
 function update() {
@@ -147,6 +147,7 @@ function move(e) {
       m.xPos = boundaries.right;
       break;
   }
+  update();
 }
 
 function calculateLimits() {
