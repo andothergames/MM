@@ -67,54 +67,6 @@ document.addEventListener("keypress", function (e) {
   }
 });
 
-//space bar ability functionality
-let drawAb = false;
-
-document.addEventListener("keydown", function (e) {
-  console.log(e.code);
-  if (e.code == "Space") {
-
-    const m = findActive();
-    
-    if (m === undefined) {
-      alert("select an active meeple");
-    }
-
-    //draw ability squares on spacebar press
-    drawAb = true;
-
-    //if arrow keys used, abilityUsed to true
-    while (true) {
-      if (
-        e.code == "ArrowUp" ||
-        e.code == "ArrowDown" ||
-        e.code == "ArrowRight" ||
-        e.code == "ArrowLeft"
-      ) {
-        m.abilityUsed = true;
-        abilityUsedStyle(m);
-        drawAb = false;
-        console.log(m.abilityUsed);
-        break;
-      }
-
-      if (e.code == "Space" || e.code == "Escape") {
-        drawAb = false;
-        console.log(m);
-        console.log(m.abilityUsed);
-        break;
-      }
-    }
-  }
-});
-
-//target
-let targetX;
-let targetY;
-
-//gameover
-let gameOver = false;
-
 window.onload = function () {
   initialise();
   buttonSetUp();
@@ -158,8 +110,6 @@ function update() {
   }
 }
 
-//FUNCTIONS
-// 
 function buttonSetUp() {
   for (let i = 0; i < game.meeples.length; i++) {
     const selectionButton = document.getElementById(game.meeples[i].name);
@@ -310,16 +260,15 @@ function abilityUsedStyle(m) {
   meeplehtml.innerText = "★";
 }
 
-function drawAbility(m) {
-  if (drawAb) {
-    context.fillStyle = "pink";
-    context.fillRect(
-      (m.xPos + 1) * blockSize,
-      m.yPos * blockSize,
-      blockSize,
-      blockSize
-    );
-  }
+function highlightAbilitySquares(directions) {
+context.fillStyle = "pink";
+for(dir in directions) {
+  context.fillRect(
+  dir.x * blockSize,
+  dir.y * blockSize,
+  blockSize,
+  blockSize)
+}
 }
 
 //winningDisplay
@@ -348,4 +297,43 @@ function tinkering() {
     }
     console.log(x + " - " + y);
   });
+}
+
+//function for checking square is legal
+function squareIsValid(x, y) {
+   return squareIsEmpty(x, y) && squareIsInBounds(x, y)
+}
+
+//function for iterating over meeples coords to see if square empty
+function squareIsEmpty(x, y) {
+  for (let i = 0; i < game.meeples.length; i++) {
+    if (game.meeples[i].xPos === x && game.meeples[i].yPos === y){
+        return false;
+    }
+  }
+  return true;
+}
+
+//function for checking if in wall bounds
+function squareIsInBounds(x, y) {
+
+}
+
+
+function validSquaresGreenAbility(meeple) {
+  const dir = {}
+
+if (squareIsValid(meeple.xPos, meeple.yPos - 3)) {
+  dir.up =  {x : meeple.xPos, y: meeple.yPos - 3}
+}
+if (squareIsValid(meeple.xPos, meeple.yPos + 3)) {
+  dir.down =  {x : meeple.xPos, y: meeple.yPos + 3}
+}
+if (squareIsValid(meeple.xPos + 3, meeple.yPos)) {
+  dir.right =  {x : meeple.xPos + 3, y: meeple.yPos}
+}
+if (squareIsValid(meeple.xPos - 3, meeple.yPos)) {
+  dir.left =  {x : meeple.xPos - 3, y: meeple.yPos}
+}
+return dir;
 }
