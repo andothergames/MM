@@ -1,33 +1,25 @@
-//board
-const blockSize = 25;
-const boardSize = 18;
+const game = {
+  blockSize: 25,
+  boardSize: 18,
+  targetX: 0,
+  targetY: 0,
+  gameOver: false,
+  meeples: [
+    meepleGreen,
+    meepleGrey,
+    meepleBlue,
+    meepleBrown,
+    meepleRed,
+    meepleWhite,
+    meepleYellow,
+    meepleBlack,
+  ],
+  winningMeeples: [],
+  buttons: []
+};
+
 let board;
 let context;
-
-//meeples
-const meeples = [
-  meepleGreen,
-  meepleGrey,
-  meepleBlue,
-  meepleBrown,
-  meepleRed,
-  meepleWhite,
-  meepleYellow,
-  meepleBlack,
-];
-
-//reachedTargetMeeples
-const winningMeeples = [];
-
-//buttons
-const buttonGreen = document.getElementById("forrestjump");
-const buttonGrey = document.getElementById("ozzymosis");
-const buttonBlue = document.getElementById("bluebeamer");
-const buttonBrown = document.getElementById("shortstop");
-const buttonRed = document.getElementById("sidestep");
-const buttonWhite = document.getElementById("skewt");
-const buttonYellow = document.getElementById("mcedge");
-const buttonBlack = document.getElementById("carbon");
 
 const buttonGreenab = document.getElementById("forrestjumpab");
 const buttonGreyab = document.getElementById("ozzymosisab");
@@ -37,38 +29,6 @@ const buttonRedab = document.getElementById("sidestepab");
 const buttonWhiteab = document.getElementById("skewtab");
 const buttonYellowab = document.getElementById("mcedgeab");
 const buttonBlackab = document.getElementById("carbonab");
-
-buttonGreen.addEventListener("click", function () {
-  activateMeeple(meepleGreen);
-});
-
-buttonGrey.addEventListener("click", function () {
-  activateMeeple(meepleGrey);
-});
-
-buttonBlue.addEventListener("click", function () {
-  activateMeeple(meepleBlue);
-});
-
-buttonBrown.addEventListener("click", function () {
-  activateMeeple(meepleBrown);
-});
-
-buttonRed.addEventListener("click", function () {
-  activateMeeple(meepleRed);
-});
-
-buttonWhite.addEventListener("click", function () {
-  activateMeeple(meepleWhite);
-});
-
-buttonYellow.addEventListener("click", function () {
-  activateMeeple(meepleYellow);
-});
-
-buttonBlack.addEventListener("click", function () {
-  activateMeeple(meepleBlack);
-});
 
 document.addEventListener("keypress", function (e) {
   switch(e.code) {
@@ -107,137 +67,68 @@ document.addEventListener("keypress", function (e) {
   }
 });
 
-//target
-let targetX;
-let targetY;
-
-//gameover
-let gameOver = false;
-
 window.onload = function () {
-  board = document.getElementById("board");
-  tinkering();
-  board.height = boardSize * blockSize;
-  board.width = boardSize * blockSize;
-  context = board.getContext("2d");
-
-  placeTarget();
-  document.addEventListener("keyup", move);
-  setInterval(update, 1000 / 10);
+  initialise();
+  buttonSetUp();
 };
 
+function initialise() {
+  board = document.getElementById("board");
+  tinkering();
+  board.height = game.boardSize * game.blockSize;
+  board.width = game.boardSize * game.blockSize;
+  context = board.getContext("2d");
+  calculateTargetPosition();
+  document.addEventListener("keyup", move);
+  setInterval(update, 1000 / 10);
+}
+
 function update() {
-  
+
   //gameover
   if (targetHit()) {
-    const reachedMeeple = findActive()
+    const reachedMeeple = findActive();
     reachedMeeple.abilityUsed = true;
-    winningMeeples.push(reachedMeeple.name);
-    reachedTargetStyle(reachedMeeple)
+    game.winningMeeples.push(reachedMeeple.name);
+    reachedTargetStyle(reachedMeeple);
     win();
-    placeTarget();
+    calculateTargetPosition();
   }
 
   //board
-  context.fillStyle = "lightgrey";
-  context.fillRect(0, 0, board.width, board.height);
+  drawBoard();
 
-  //warp points
-  drawCircle("cornflowerblue", 3 * blockSize, 3 * blockSize, blockSize, 4);
-  drawCircle("cornflowerblue", 7 * blockSize, 7 * blockSize, blockSize, 4);
-  drawCircle("cornflowerblue", 10 * blockSize, 10 * blockSize, blockSize, 4);
-  drawCircle("cornflowerblue", 14 * blockSize, 14 * blockSize, blockSize, 4);
-
-  //draw meeples
-  for (let i = 0; i < meeples.length; i++) {
-    context.fillStyle = meeples[i].color;
+  //draw game.meeples
+  for (let i = 0; i < game.meeples.length; i++) {
+    context.fillStyle = game.meeples[i].color;
     context.fillRect(
-      meeples[i].xPos * blockSize,
-      meeples[i].yPos * blockSize,
-      blockSize,
-      blockSize
+      game.meeples[i].xPos * game.blockSize,
+      game.meeples[i].yPos * game.blockSize,
+      game.blockSize,
+      game.blockSize
     );
   }
-
-  //target
-  drawCircle("deeppink", targetX * blockSize, targetY * blockSize, blockSize, 2);
-  drawCircle("white", targetX * blockSize, targetY * blockSize, blockSize, 3);
-  drawCircle("deeppink", targetX * blockSize, targetY * blockSize, blockSize, 5);
-
-  //gridlines
-  let startingX = 0;
-  let startingY = 0;
-  for (let i = 0; i < boardSize; i++) {
-    drawColLine(startingX, 0, blockSize * boardSize);
-    drawRowLine(startingY, 0, blockSize * boardSize);
-    startingX += blockSize;
-    startingY += blockSize;
-  }
-
-  drawWalls();
-
-  //black corner boxes
-  context.fillStyle = "black";
-  context.fillRect(0, 0, blockSize, blockSize);
-  context.fillRect(
-    (boardSize - 1) * blockSize,
-    (boardSize - 1) * blockSize,
-    blockSize,
-    blockSize
-  );
 }
 
 //FUNCTIONS
 // 
-function drawWalls() {
-  context.lineWidth = 3;
-  context.strokeStyle = "MidnightBlue";
-  for (let i = 0; i < boardStructure.length; i++) {
-    wall = boardStructure[i];
-    context.beginPath();
-    if (wall.row) {
-      context.moveTo((wall.after + 1) * blockSize, wall.existson * blockSize);
-      context.lineTo(
-        (wall.after + 1) * blockSize,
-        (wall.existson + 1) * blockSize
-      );
-    } else {
-      context.moveTo(wall.existson * blockSize, (wall.after + 1) * blockSize);
-      context.lineTo(
-        (wall.existson + 1) * blockSize,
-        (wall.after + 1) * blockSize
-      );
-    }
-    context.closePath();
-    context.stroke();
+function buttonSetUp() {
+  selectionButtons();
+}
+
+function selectionButtons() {
+  // At the moment this relies on the fact that the meeples are added to their array
+  // in the same order as the buttons. if we want to change the order of these
+  // then this function needs to change a little bit to check for the correct meeple
+  // rather than blindly use the meeple at position i
+  let selectionButtons = document.getElementsByClassName("mbutton");
+  for (let i = 0; i < selectionButtons.length; i++) {
+    const b = document.getElementById(selectionButtons[i].id)
+    game.buttons.push(b);
+    b.addEventListener("click", function() {
+      activateMeeple(game.meeples[i]);
+    })
   }
-}
-
-//gridlines
-function drawColLine(x, startY, endY) {
-  context.lineWidth = 1;
-  context.strokeStyle = "black";
-  context.beginPath();
-  context.moveTo(x, startY);
-  context.lineTo(x, endY);
-  context.stroke();
-}
-
-function drawRowLine(y, startX, endX) {
-  context.lineWidth = 1;
-  context.strokeStyle = "black";
-  context.beginPath();
-  context.moveTo(startX, y);
-  context.lineTo(endX, y);
-  context.stroke();
-}
-
-//circles
-function drawCircle(color, x, y, r, div) {
-  context.fillStyle = color;
-  context.beginPath();
-  context.arc(x + blockSize / 2, y + blockSize / 2, r / div, 0, 2 * Math.PI);
-  context.fill();
 }
 
 //movement
@@ -267,14 +158,14 @@ function calculateLimits() {
   let c = m.xPos;
   let limits = {
     upper: 0,
-    lower: boardSize - 1,
+    lower: game.boardSize - 1,
     left: 0,
-    right: boardSize - 1,
+    right: game.boardSize - 1,
   };
   if (m.xPos == 0) limits.upper = 1;
-  if (m.xPos == boardSize - 1) limits.lower = boardSize - 2;
+  if (m.xPos == game.boardSize - 1) limits.lower = game.boardSize - 2;
   if (m.yPos == 0) limits.left = 1;
-  if (m.yPos == boardSize - 1) limits.right = boardSize - 2;
+  if (m.yPos == game.boardSize - 1) limits.right = game.boardSize - 2;
 
   for (let i = 0; i < boardStructure.length; i++) {
     let wall = boardStructure[i];
@@ -299,25 +190,25 @@ function calculateLimits() {
     }
   }
 
-  for (let i = 0; i < meeples.length; i++) {
-    if (!meeples[i].isActive) {
+  for (let i = 0; i < game.meeples.length; i++) {
+    if (!game.meeples[i].isActive) {
       //columns
-      if (meeples[i].xPos === c) {
-      if (meeples[i].yPos >= limits.upper && meeples[i].yPos < r) {
-        limits.upper = meeples[i].yPos + 1;
+      if (game.meeples[i].xPos === c) {
+      if (game.meeples[i].yPos >= limits.upper && game.meeples[i].yPos < r) {
+        limits.upper = game.meeples[i].yPos + 1;
       }
-      if (meeples[i].yPos <= limits.lower && meeples[i].yPos > r) {
-        limits.lower = meeples[i].yPos - 1;
+      if (game.meeples[i].yPos <= limits.lower && game.meeples[i].yPos > r) {
+        limits.lower = game.meeples[i].yPos - 1;
       }
     }
      //rows
-    if (meeples[i].yPos === r) {
+    if (game.meeples[i].yPos === r) {
 
-      if (meeples[i].xPos >= limits.left && meeples[i].xPos < c) {
-        limits.left = meeples[i].xPos + 1;
+      if (game.meeples[i].xPos >= limits.left && game.meeples[i].xPos < c) {
+        limits.left = game.meeples[i].xPos + 1;
       }
-      if (meeples[i].xPos <= limits.right && meeples[i].xPos > c) {
-        limits.right = meeples[i].xPos - 1;
+      if (game.meeples[i].xPos <= limits.right && game.meeples[i].xPos > c) {
+        limits.right = game.meeples[i].xPos - 1;
       }
     }    
   }
@@ -326,21 +217,21 @@ function calculateLimits() {
 }
 
 //randomise target
-function placeTarget() {
-  targetX = Math.floor(Math.random() * boardSize);
-  targetY = Math.floor(Math.random() * boardSize);
-  for (let i = 0; i < meeples.length; i++) {
-    if (meeples[i].xPos === targetX && meeples[i].yPos === targetY) {
-      placeTarget();
+function calculateTargetPosition() {
+  game.targetX = Math.floor(Math.random() * game.boardSize);
+  game.targetY = Math.floor(Math.random() * game.boardSize);
+  for (let i = 0; i < game.meeples.length; i++) {
+    if (game.meeples[i].xPos === game.targetX && game.meeples[i].yPos === game.targetY) {
+      calculateTargetPosition();
     }
   }  
 }
 
 //findActiveMeeple
 function findActive() {
-  for (let i = 0; i < meeples.length; i++) {
-    if (meeples[i].isActive) {
-      return meeples[i];
+  for (let i = 0; i < game.meeples.length; i++) {
+    if (game.meeples[i].isActive) {
+      return game.meeples[i];
     }
   }
 }
@@ -348,9 +239,9 @@ function findActive() {
 
 //activateMeeples
 function activateMeeple(m) {
-  for (let i = 0; i < meeples.length; i++) {
-    meeples[i].isActive = (m === meeples[i]);
-    meeples[i].isActive ? document.getElementById(meeples[i].name).classList.add('active') : document.getElementById(meeples[i].name).classList.remove('active')
+  for (let i = 0; i < game.meeples.length; i++) {
+    game.meeples[i].isActive = (m === game.meeples[i]);
+    game.meeples[i].isActive ? document.getElementById(game.meeples[i].name).classList.add('active') : document.getElementById(game.meeples[i].name).classList.remove('active')
   }  
 }
 
@@ -360,7 +251,7 @@ function targetHit() {
   if (active.reachedTarget) return false;
   let x = active.xPos;
   let y = active.yPos;
-  return x === targetX && y === targetY;
+  return x === game.targetX && y === game.targetY;
 }
 
 //target reached style
@@ -371,9 +262,9 @@ function reachedTargetStyle(m) {
 
 //winningDisplay
 function win() {
-  console.log(winningMeeples)
-  if (winningMeeples.length === 6) {
-    gameOver = true
+  console.log(game.winningMeeples)
+  if (game.winningMeeples.length === 6) {
+    game.gameOver = true
     alert('you have won!')
   }
   return;
@@ -381,16 +272,15 @@ function win() {
 
 function tinkering() {
   board.addEventListener('click', function(e) {
-    let x = Math.floor(e.offsetX / blockSize);
-    let y = Math.floor(e.offsetY / blockSize);
-    if (x === targetX && y === targetY) {
-      console.log("you hit the target");
+    let x = Math.floor(e.offsetX / game.blockSize);
+    let y = Math.floor(e.offsetY / game.blockSize);
+    if (x === game.targetX && y === game.targetY) {
       let successSound = new Audio('success.mp3');
       successSound.play();
     }
-    for (let i = 0; i < meeples.length; i++) {
-      if (meeples[i].xPos === x && meeples[i].yPos === y) {
-        activateMeeple(meeples[i]);
+    for (let i = 0; i < game.meeples.length; i++) {
+      if (game.meeples[i].xPos === x && game.meeples[i].yPos === y) {
+        activateMeeple(game.meeples[i]);
         break;
       }
     }
