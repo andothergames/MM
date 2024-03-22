@@ -27,15 +27,6 @@ const game = {
 let board;
 let context;
 
-// const buttonGreenab = document.getElementById("forrestjumpab");
-// const buttonGreyab = document.getElementById("ozzymosisab");
-// const buttonBlueab = document.getElementById("bluebeamerab");
-// const buttonBrownab = document.getElementById("shortstopab");
-// const buttonRedab = document.getElementById("sidestepab");
-// const buttonWhiteab = document.getElementById("skewtab");
-// const buttonYellowab = document.getElementById("mcedgeab");
-// const buttonBlackab = document.getElementById("carbonab");
-
 document.addEventListener("keypress", function (e) {
   switch (e.code) {
     case "Digit1":
@@ -86,7 +77,7 @@ function initialise() {
   context = board.getContext("2d");
   calculateTargetPosition();
   document.addEventListener("keyup", move);
-  setInterval(update, 1000 / 10);
+  update();
 }
 
 function update() {
@@ -126,10 +117,7 @@ function buttonSetUp() {
 
     abilityButton.addEventListener("click", function () {
       activateMeeple(game.meeples[i]);
-      const dir = {x: 1, y: 2};
-        console.log('test')
-      //game[meeples][i].name(game[meeples][i]);
-      highlightAbilitySquares(dir);
+      meepleAbility();
     });
   }
 }
@@ -153,6 +141,7 @@ function move(e) {
       m.xPos = boundaries.right;
       break;
   }
+  update();
 }
 
 function calculateLimits() {
@@ -264,6 +253,46 @@ function reachedTargetStyle(m) {
   meeplehtml.style.opacity = 1;
 }
 
+//meepleAbility
+function meepleAbility() {
+  const m = findActive();
+  
+  if (m.name === "forrestjump") {
+    const dir = validSquaresGreenAbility(m)
+    console.log(dir);
+    highlightAbilitySquares(dir);
+  };
+  if (m.name === "ozzymosis") {
+    const dir = validSquaresGreyAbility(m)
+    highlightAbilitySquares(dir);
+  };
+  if (m.name === "bluebeamer") {
+    const dir = validSquaresBlueAbility(m)
+    highlightAbilitySquares(dir);
+  };
+  if (m.name === "shortstop") {
+    const dir = validSquaresRedAbility(m)
+    highlightAbilitySquares(dir);
+  };
+  if (m.name === "sidestep") {
+    const dir = validSquaresBrownAbility(m)
+    highlightAbilitySquares(dir);
+  };
+  if (m.name === "skewt") {
+    const dir = validSquaresWhiteAbility(m)
+    highlightAbilitySquares(dir);
+  };
+  if (m.name === "mcedge") {
+    const dir = validSquaresYellowAbility(m)
+    highlightAbilitySquares(dir);
+  };
+  if (m.name === "carbon") {
+    const dir = validSquaresBlackAbility(m)
+    highlightAbilitySquares(dir);
+  };
+  
+}
+
 //ability used style
 function abilityUsedStyle(m) {
   const meeplehtml = document.getElementById(`${m.name}ab`);
@@ -272,14 +301,15 @@ function abilityUsedStyle(m) {
 
 function highlightAbilitySquares(dir) {
   context.fillStyle = "pink";
-  // for (key in dir) {
+    
+  for (let key in dir) {
     context.fillRect(
-      dir.x * game.blockSize,
-      dir.y * game.blockSize,
+      dir[key].x * game.blockSize,
+      dir[key].y * game.blockSize,
       game.blockSize,
       game.blockSize
     );
-  // }
+  };
 }
 
 //winningDisplay
@@ -331,7 +361,7 @@ function squareIsInBounds(x, y) {}
 
 //valid squares functions
 
-function forrestjump(meeple) {
+function validSquaresGreenAbility(meeple) {
   const dir = {};
 
   if (squareIsValid(meeple.xPos, meeple.yPos - 3)) {
@@ -349,7 +379,7 @@ function forrestjump(meeple) {
   return dir;
 }
 
-function sidestep(meeple) {
+function validSquaresRedAbility(meeple) {
   const dir = {};
 
   if (squareIsValid(meeple.xPos, meeple.yPos - 1)) {
@@ -367,7 +397,7 @@ function sidestep(meeple) {
   return dir;
 }
 
-function skewt(meeple) {
+function validSquaresWhiteAbility(meeple) {
   const dir = {};
 
   if (squareIsValid(meeple.xPos + 1, meeple.yPos - 1)) {
@@ -385,7 +415,7 @@ function skewt(meeple) {
   return dir;
 }
 
-function bluebeamer(meeple) {
+function validSquaresBlueAbility(meeple) {
   const dir = {};
 
   if (squareIsValid(game.warps[0].x, game.warps[0].y)) {
@@ -403,18 +433,18 @@ function bluebeamer(meeple) {
   return dir;
 }
 
-function ozzymosis(meeple) {
+function validSquaresGreyAbility(meeple) {
+  console.log('shouldnt be in here')
+}
+
+function validSquaresBrownAbility(meeple) {
   console.log(meeple.name)
 }
 
-function shortstop(meeple) {
+function validSquaresYellowAbility(meeple) {
   console.log(meeple.name)
 }
 
-function mcedge(meeple) {
-  console.log(meeple.name)
-}
-
-function carbon(meeple) {
+function validSquaresBlackAbility(meeple) {
   console.log(meeple.name)
 }
