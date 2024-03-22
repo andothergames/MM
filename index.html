@@ -13,7 +13,28 @@
 
   <body>
     <h1>mutant meeples</h1>
+    <p><span class="link">How to play</span></p>
+    <div class="popup" id="popup">
+      The aim of mutant meeples is to move 6 individual meeples onto the target. 
+      Select the meeples with the coloured buttons below or the individual number keys.
+      <p>Meeples have SUPER SPEED. When you click an ARROW KEY they move as far as possible in that direction and stop only when they 
+        hit a wall, another meeple or the edge of the board.</p>
+      On each run to the target you can only use THREE meeples.
+      Each meeple has a special ability accessed with the star buttons.
+      <ul id="ability-instructions">
+        <li>GREEN - jump over two spaces in any direction</li>
+        <li>GREY - move THROUGH the first wall in any direction</li>
+        <li>BLUE - jump to any of the blue warp spots.</li>
+        <li>BROWN - STOP one space short of a wall or meeple</li>
+        <li>RED - step ONE space up, down left or right</li>
+        <li>WHITE - step ONE space diagonally</li>
+        <li>YELLOW - WRAP around the edge of the board</li>
+        <li>BLACK - use the ability of ANY other meeple as long as that meeple hasn't yet used their ability</li>
+      </ul>
+      
+    </div>
     <canvas id="board"></canvas>
+    
 
     <div class="controls">
       <div class="buttons">
@@ -51,7 +72,16 @@
     <script src="draw.js"></script>
     <script src="flippedboard.js"></script>
     <script src="script.js"></script>
-
+    <script>
+      // JavaScript to show and hide the pop-up
+      document.querySelector('.link').addEventListener('mouseover', function() {
+          document.getElementById('popup').style.display = 'block';
+      });
+      
+      document.querySelector('.link').addEventListener('mouseout', function() {
+          document.getElementById('popup').style.display = 'none';
+      });
+      </script>
     
   </body>
 </html>
