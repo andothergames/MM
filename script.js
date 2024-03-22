@@ -14,6 +14,14 @@ const game = {
     meepleYellow,
     meepleBlack,
   ],
+  warpPoint1X: 3,
+  warpPoint1Y: 3,
+  warpPoint2X: 7,
+  warpPoint2Y: 7,
+  warpPoint3X: 10,
+  warpPoint3Y: 10,
+  warpPoint4X: 14,
+  warpPoint4Y: 14,
   winningMeeples: [],
   buttons: []
 };
@@ -319,6 +327,7 @@ function squareIsInBounds(x, y) {
 
 }
 
+//valid squares functions
 
 function validSquaresGreenAbility(meeple) {
   const dir = {}
@@ -329,11 +338,65 @@ if (squareIsValid(meeple.xPos, meeple.yPos - 3)) {
 if (squareIsValid(meeple.xPos, meeple.yPos + 3)) {
   dir.down =  {x : meeple.xPos, y: meeple.yPos + 3}
 }
+if (squareIsValid(meeple.xPos - 3, meeple.yPos)) {
+  dir.left =  {x : meeple.xPos - 3, y: meeple.yPos}
+}
 if (squareIsValid(meeple.xPos + 3, meeple.yPos)) {
   dir.right =  {x : meeple.xPos + 3, y: meeple.yPos}
 }
-if (squareIsValid(meeple.xPos - 3, meeple.yPos)) {
-  dir.left =  {x : meeple.xPos - 3, y: meeple.yPos}
+return dir;
+}
+
+function validSquaresRedAbility(meeple) {
+  const dir = {}
+
+if (squareIsValid(meeple.xPos, meeple.yPos - 1)) {
+  dir.up =  {x : meeple.xPos, y: meeple.yPos - 1}
+}
+if (squareIsValid(meeple.xPos, meeple.yPos + 1)) {
+  dir.down =  {x : meeple.xPos, y: meeple.yPos + 1}
+}
+if (squareIsValid(meeple.xPos - 1, meeple.yPos)) {
+  dir.left =  {x : meeple.xPos - 1, y: meeple.yPos}
+}
+if (squareIsValid(meeple.xPos + 1, meeple.yPos)) {
+  dir.right =  {x : meeple.xPos + 1, y: meeple.yPos}
+}
+return dir;
+}
+
+function validSquaresWhiteAbility(meeple) {
+  const dir = {}
+
+if (squareIsValid(meeple.xPos + 1, meeple.yPos - 1)) {
+  dir.up =  {x : meeple.xPos + 1, y: meeple.yPos - 1}
+}
+if (squareIsValid(meeple.xPos + 1, meeple.yPos + 1)) {
+  dir.down =  {x : meeple.xPos + 1, y: meeple.yPos + 1}
+}
+if (squareIsValid(meeple.xPos - 1, meeple.yPos + 1)) {
+  dir.left =  {x : meeple.xPos - 1, y: meeple.yPos + 1}
+}
+if (squareIsValid(meeple.xPos - 1, meeple.yPos - 1)) {
+  dir.right =  {x : meeple.xPos - 1, y: meeple.yPos - 1}
+}
+return dir;
+}
+
+function validSquaresBlueAbility(meeple) {
+  const dir = {}
+
+if (squareIsValid(game.warpPoint1X, game.warpPoint1Y)) {
+  dir.up =  {x : game.warpPoint1X, y: game.warpPoint1Y}
+}
+if (squareIsValid(game.warpPoint2X, game.warpPoint1Y)) {
+  dir.down =  {x : game.warpPoint2X, y: game.warpPoint1Y}
+}
+if (squareIsValid(game.warpPoint3X, game.warpPoint3Y)) {
+  dir.left =  {x : game.warpPoint3X, y: game.warpPoint3Y}
+}
+if (squareIsValid(game.warpPoint4X, game.warpPoint4Y)) {
+  dir.right =  {x : game.warpPoint4X, y: game.warpPoint4Y}
 }
 return dir;
 }
