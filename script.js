@@ -126,7 +126,10 @@ function buttonSetUp() {
 
     abilityButton.addEventListener("click", function () {
       activateMeeple(game.meeples[i]);
-      console.log("ability functionality will go here");
+      const dir = {x: 1, y: 2};
+        console.log('test')
+      //game[meeples][i].name(game[meeples][i]);
+      highlightAbilitySquares(dir);
     });
   }
 }
@@ -242,6 +245,7 @@ function activateMeeple(m) {
       : document
           .getElementById(game.meeples[i].name)
           .classList.remove("active");
+          console.log(m.name);
   }
 }
 
@@ -268,14 +272,14 @@ function abilityUsedStyle(m) {
 
 function highlightAbilitySquares(dir) {
   context.fillStyle = "pink";
-  for (key in dir) {
+  // for (key in dir) {
     context.fillRect(
-      dir.x * blockSize,
-      dir.y * blockSize,
-      blockSize,
-      blockSize
+      dir.x * game.blockSize,
+      dir.y * game.blockSize,
+      game.blockSize,
+      game.blockSize
     );
-  }
+  // }
 }
 
 //winningDisplay
@@ -308,7 +312,8 @@ function tinkering() {
 
 //function for checking square is legal
 function squareIsValid(x, y) {
-  return squareIsEmpty(x, y) && squareIsInBounds(x, y);
+  return squareIsEmpty(x, y); 
+  //&& squareIsInBounds(x, y);
 }
 
 //function for iterating over meeples coords to see if square empty
@@ -326,7 +331,7 @@ function squareIsInBounds(x, y) {}
 
 //valid squares functions
 
-function validSquaresGreenAbility(meeple) {
+function forrestjump(meeple) {
   const dir = {};
 
   if (squareIsValid(meeple.xPos, meeple.yPos - 3)) {
@@ -344,7 +349,7 @@ function validSquaresGreenAbility(meeple) {
   return dir;
 }
 
-function validSquaresRedAbility(meeple) {
+function sidestep(meeple) {
   const dir = {};
 
   if (squareIsValid(meeple.xPos, meeple.yPos - 1)) {
@@ -362,7 +367,7 @@ function validSquaresRedAbility(meeple) {
   return dir;
 }
 
-function validSquaresWhiteAbility(meeple) {
+function skewt(meeple) {
   const dir = {};
 
   if (squareIsValid(meeple.xPos + 1, meeple.yPos - 1)) {
@@ -380,7 +385,7 @@ function validSquaresWhiteAbility(meeple) {
   return dir;
 }
 
-function validSquaresBlueAbility(meeple) {
+function bluebeamer(meeple) {
   const dir = {};
 
   if (squareIsValid(game.warps[0].x, game.warps[0].y)) {
@@ -396,4 +401,20 @@ function validSquaresBlueAbility(meeple) {
     dir.right = { x: game.warps[3].x, y: game.warps[3].y };
   }
   return dir;
+}
+
+function ozzymosis(meeple) {
+  console.log(meeple.name)
+}
+
+function shortstop(meeple) {
+  console.log(meeple.name)
+}
+
+function mcedge(meeple) {
+  console.log(meeple.name)
+}
+
+function carbon(meeple) {
+  console.log(meeple.name)
 }
