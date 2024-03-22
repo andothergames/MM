@@ -27,14 +27,14 @@ const game = {
 let board;
 let context;
 
-const buttonGreenab = document.getElementById("forrestjumpab");
-const buttonGreyab = document.getElementById("ozzymosisab");
-const buttonBlueab = document.getElementById("bluebeamerab");
-const buttonBrownab = document.getElementById("shortstopab");
-const buttonRedab = document.getElementById("sidestepab");
-const buttonWhiteab = document.getElementById("skewtab");
-const buttonYellowab = document.getElementById("mcedgeab");
-const buttonBlackab = document.getElementById("carbonab");
+// const buttonGreenab = document.getElementById("forrestjumpab");
+// const buttonGreyab = document.getElementById("ozzymosisab");
+// const buttonBlueab = document.getElementById("bluebeamerab");
+// const buttonBrownab = document.getElementById("shortstopab");
+// const buttonRedab = document.getElementById("sidestepab");
+// const buttonWhiteab = document.getElementById("skewtab");
+// const buttonYellowab = document.getElementById("mcedgeab");
+// const buttonBlackab = document.getElementById("carbonab");
 
 document.addEventListener("keypress", function (e) {
   switch (e.code) {
@@ -219,15 +219,10 @@ function calculateLimits() {
 function calculateTargetPosition() {
   game.targetX = Math.floor(Math.random() * game.boardSize);
   game.targetY = Math.floor(Math.random() * game.boardSize);
-  for (let i = 0; i < game.meeples.length; i++) {
-    if (
-      game.meeples[i].xPos === game.targetX &&
-      game.meeples[i].yPos === game.targetY
-    ) {
+  if(!squareIsEmpty(game.targetX, game.targetY)){
       calculateTargetPosition();
     }
   }
-}
 
 //findActiveMeeple
 function findActive() {
