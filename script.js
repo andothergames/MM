@@ -154,6 +154,8 @@ function meepleMovesTo(arr, m, row) {
   // It's definitely possible that this will be buggy if it receives an array of < 3 items
   // Should be fairly simple to fix and probably shouldn't come up unless someone
   // jams all the meeples into the corner.
+  // The early return might fix it tho!
+  if (arr.length < 3) return arr;
   let meeplePosition = row ? m.xPos : m.yPos;
   let closestSmallerIndex = 0;
   let closestLargerIndex = 1;
