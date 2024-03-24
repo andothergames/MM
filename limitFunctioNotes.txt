@@ -2,6 +2,12 @@
 
 2) ..done
 
+2.5) There's a problem where the index of the meeple is the same as the index of a blocker (AKA it's against a wall)
+    I need to remove that blocker but the problem is that it's difficult to do that with DIRECTION
+
+2.7) IT MIGHT BE BEST TO GO BACK TO THE OLD WAY OF DOING THIS AND TO WRITE A DIFFERENT FUNCTION FOR THE LIMIT BASED ABILITIES.
+    - FOR GREY, TAKE EVERY DIRECTION AND FIND THE NEAREST WALL - IGNORE DIRECTIONS WHERE THE FIRST THING YOU FIND IS A MEEPLE.
+
 3) adjust move so that it uses: 
     * calculateBlockers(row)
     * meepleMovesTo(arr, m, row)

@@ -133,9 +133,11 @@ function move(e) {
   let m = findActive();
 
   let boundaries = calculateLimits();
+  let blockers;
+  let moves;
   switch (e.code) {
     case "ArrowUp":
-      m.yPos = boundaries.upper;
+      //m.yPos = boundaries.upper;
       break;
     case "ArrowDown":
       m.yPos = boundaries.lower;
@@ -202,6 +204,7 @@ function calculateBlockers(row) {
       }
     }
   }
+
   return blockers.sort(function(a, b) {
     return a - b;
   });
