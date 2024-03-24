@@ -133,11 +133,10 @@ function move(e) {
   let m = findActive();
 
   let boundaries = calculateLimits();
-  let blockers;
-  let moves;
+
   switch (e.code) {
     case "ArrowUp":
-      //m.yPos = boundaries.upper;
+      m.yPos = boundaries.upper;
       break;
     case "ArrowDown":
       m.yPos = boundaries.lower;
@@ -152,63 +151,63 @@ function move(e) {
   update();
 }
 
-function meepleMovesTo(arr, m, row) {
-  // It's definitely possible that this will be buggy if it receives an array of < 3 items
-  // Should be fairly simple to fix and probably shouldn't come up unless someone
-  // jams all the meeples into the corner.
-  // The early return might fix it tho!
-  if (arr.length < 3) return arr;
-  let meeplePosition = row ? m.xPos : m.yPos;
-  let closestSmallerIndex = 0;
-  let closestLargerIndex = 1;
-  while (arr[closestLargerIndex] < meeplePosition) {
-    closestSmallerIndex++;
-    closestLargerIndex++;
-  }
-  return [arr[closestSmallerIndex], arr[closestLargerIndex]]
-}
+// function meepleMovesTo(arr, m, row) {
+//   // It's definitely possible that this will be buggy if it receives an array of < 3 items
+//   // Should be fairly simple to fix and probably shouldn't come up unless someone
+//   // jams all the meeples into the corner.
+//   // The early return might fix it tho!
+//   if (arr.length < 3) return arr;
+//   let meeplePosition = row ? m.xPos : m.yPos;
+//   let closestSmallerIndex = 0;
+//   let closestLargerIndex = 1;
+//   while (arr[closestLargerIndex] < meeplePosition) {
+//     closestSmallerIndex++;
+//     closestLargerIndex++;
+//   }
+//   return [arr[closestSmallerIndex], arr[closestLargerIndex]]
+// }
 
-function calculateBlockers(row) {
-  let m = findActive();
+// function calculateBlockers(row) {
+//   let m = findActive();
   
-  let blockers = [0, game.boardSize - 1]
-  let activeChannel = row ? m.yPos : m.xPos;
-  let positionInActiveChannel = row ? m.xPos : m.yPos;
+//   let blockers = [0, game.boardSize - 1]
+//   let activeChannel = row ? m.yPos : m.xPos;
+//   let positionInActiveChannel = row ? m.xPos : m.yPos;
 
-  if (activeChannel === 0) blockers[0] = 1;
-  if (activeChannel === game.boardSize - 1) blockers[1] = game.boardSize - 2;
+//   if (activeChannel === 0) blockers[0] = 1;
+//   if (activeChannel === game.boardSize - 1) blockers[1] = game.boardSize - 2;
 
-  for (let i = 0; i < boardStructure.length; i++) {
-    if(boardStructure[i].row === row && boardStructure[i].existson === activeChannel) {
-      if (boardStructure[i].after < positionInActiveChannel) {
-        blockers.push(boardStructure[i].after + 1);
-      } else if (boardStructure[i].after >= positionInActiveChannel) {
-        blockers.push(boardStructure[i].after);
-      }
-    }
-  }
+//   for (let i = 0; i < boardStructure.length; i++) {
+//     if(boardStructure[i].row === row && boardStructure[i].existson === activeChannel) {
+//       if (boardStructure[i].after < positionInActiveChannel) {
+//         blockers.push(boardStructure[i].after + 1);
+//       } else if (boardStructure[i].after >= positionInActiveChannel) {
+//         blockers.push(boardStructure[i].after);
+//       }
+//     }
+//   }
 
-  for (let i = 0; i < game.meeples.length; i++) {
-    let meepleBeingChecked = game.meeples[i];
-    let checkingChannel = row ? meepleBeingChecked.yPos : meepleBeingChecked.xPos;
-    let positionInChannel = row ? meepleBeingChecked.xPos : meepleBeingChecked.yPos;
-    if (checkingChannel === activeChannel && game.meeples[i].name !== m.name) {
-      if (positionInChannel < positionInActiveChannel) {
-        blockers.push(positionInChannel + 1);
-      } else {
-        blockers.push(positionInChannel - 1);
-      }
-      if (blockers.indexOf(positionInChannel) !== -1) {
-        let index = blockers.indexOf(positionInChannel);
-        blockers.splice(index, 1);
-      }
-    }
-  }
+//   for (let i = 0; i < game.meeples.length; i++) {
+//     let meepleBeingChecked = game.meeples[i];
+//     let checkingChannel = row ? meepleBeingChecked.yPos : meepleBeingChecked.xPos;
+//     let positionInChannel = row ? meepleBeingChecked.xPos : meepleBeingChecked.yPos;
+//     if (checkingChannel === activeChannel && game.meeples[i].name !== m.name) {
+//       if (positionInChannel < positionInActiveChannel) {
+//         blockers.push(positionInChannel + 1);
+//       } else {
+//         blockers.push(positionInChannel - 1);
+//       }
+//       if (blockers.indexOf(positionInChannel) !== -1) {
+//         let index = blockers.indexOf(positionInChannel);
+//         blockers.splice(index, 1);
+//       }
+//     }
+//   }
 
-  return blockers.sort(function(a, b) {
-    return a - b;
-  });
-}
+//   return blockers.sort(function(a, b) {
+//     return a - b;
+//   });
+// }
 
 function calculateLimits() {
   let m = findActive();
