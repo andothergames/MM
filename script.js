@@ -147,30 +147,49 @@ function move(e) {
       m.xPos = boundaries.right;
       break;
   }
-  console.log(calculateRowBlockers());
+  console.log("row markers: " + calculateBlockers(true));
+  console.log("col markers: " + calculateBlockers(false));
   update();
 }
 
-function calculateRowBlockers() {
+function calculateBlockers(row) {
   let m = findActive();
-  let rowBlockers = [-1, game.boardSize - 1]
+  
+  let blockers = [0, game.boardSize - 1]
+  let activeChannel = row ? m.yPos : m.xPos;
+  let positionInActiveChannel = row ? m.xPos : m.yPos;
 
-  if (m.yPos == 0) rowBlockers[0] = 0;
-  if (m.yPos == game.boardSize - 1) rowBlockers[1] = game.boardSize - 2;
+  if (activeChannel === 0) blockers[0] = 1;
+  if (activeChannel === game.boardSize - 1) blockers[1] = game.boardSize - 2;
 
   for (let i = 0; i < boardStructure.length; i++) {
-    if(boardStructure[i].row && boardStructure[i].existson === m.yPos) {
-      rowBlockers.push(boardStructure[i].after);
+    if(boardStructure[i].row === row && boardStructure[i].existson === activeChannel) {
+      if (boardStructure[i].after < positionInActiveChannel) {
+        blockers.push(boardStructure[i].after + 1);
+      } else if (boardStructure[i].after >= positionInActiveChannel) {
+        blockers.push(boardStructure[i].after);
+      }
     }
   }
   
   for (let i = 0; i < game.meeples.length; i++) {
-    if (game.meeples[i].yPos === m.yPos && game.meeples[i].name !== m.name) {
-      rowBlockers.push(game.meeples[i].xPos);
+    let meepleBeingChecked = game.meeples[i];
+    let checkingChannel = row ? meepleBeingChecked.yPos : meepleBeingChecked.xPos;
+    let positionInChannel = row ? meepleBeingChecked.xPos : meepleBeingChecked.yPos;
+    if (checkingChannel === activeChannel && game.meeples[i].name !== m.name) {
+      if (positionInChannel < positionInActiveChannel) {
+        blockers.push(positionInChannel + 1);
+      } else {
+        blockers.push(positionInChannel - 1);
+      }
+      if (blockers.indexOf(positionInChannel) !== -1) {
+        let index = blockers.indexOf(positionInChannel);
+        blockers.splice(index, 1);
+      }
     }
   }
 
-  return rowBlockers.sort(function(a, b) {
+  return blockers.sort(function(a, b) {
     return a - b;
   });
 }
