@@ -147,13 +147,39 @@ function move(e) {
       m.xPos = boundaries.right;
       break;
   }
+  console.log(calculateRowBlockers());
   update();
+}
+
+function calculateRowBlockers() {
+  let m = findActive();
+  let rowBlockers = [-1, game.boardSize - 1]
+
+  if (m.yPos == 0) rowBlockers[0] = 0;
+  if (m.yPos == game.boardSize - 1) rowBlockers[1] = game.boardSize - 2;
+
+  for (let i = 0; i < boardStructure.length; i++) {
+    if(boardStructure[i].row && boardStructure[i].existson === m.yPos) {
+      rowBlockers.push(boardStructure[i].after);
+    }
+  }
+  
+  for (let i = 0; i < game.meeples.length; i++) {
+    if (game.meeples[i].yPos === m.yPos && game.meeples[i].name !== m.name) {
+      rowBlockers.push(game.meeples[i].xPos);
+    }
+  }
+
+  return rowBlockers.sort(function(a, b) {
+    return a - b;
+  });
 }
 
 function calculateLimits() {
   let m = findActive();
   let r = m.yPos;
   let c = m.xPos;
+  
   let limits = {
     upper: 0,
     lower: game.boardSize - 1,

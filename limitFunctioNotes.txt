@@ -1,0 +1,18 @@
+1) write the function that returns the same array as 
+    calculateRowBlockers() but for the columns
+
+[0, 4, 12, 17]
+
+2) write meepleMovesTo(arr, m) that takes an array of positions and a meeple and returns the position that the meeple can move to in either direction (array with two items)
+    - This will need to offset by 1 in one direction and NOT do that in the other.
+    - I think up/left has the offset
+
+3) adjust move so that it uses:
+    * calculateRowBlockers()
+    * calculateColBlockers()
+    * meepleMovesTo()
+
+In order to apply the new coordinates to the meeples x||y coordinare
+
+
+Then for greys ability, return row and col blockers. test if the blocker to be ignored is a meeple
