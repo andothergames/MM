@@ -1,16 +1,11 @@
-1) write the function that returns the same array as 
-    calculateRowBlockers() but for the columns
+1) ..done
 
-[0, 4, 12, 17]
+2) ..done
 
-2) write meepleMovesTo(arr, m) that takes an array of positions and a meeple and returns the position that the meeple can move to in either direction (array with two items)
-    - This will need to offset by 1 in one direction and NOT do that in the other.
-    - I think up/left has the offset
-
-3) adjust move so that it uses:
-    * calculateRowBlockers()
-    * calculateColBlockers()
-    * meepleMovesTo()
+3) adjust move so that it uses: 
+    * calculateBlockers(row)
+    * meepleMovesTo(arr, m, row)
+(row is always a boolean, double check we're using the right dimension)
 
 In order to apply the new coordinates to the meeples x||y coordinare
 

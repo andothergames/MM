@@ -147,9 +147,21 @@ function move(e) {
       m.xPos = boundaries.right;
       break;
   }
-  console.log("row markers: " + calculateBlockers(true));
-  console.log("col markers: " + calculateBlockers(false));
   update();
+}
+
+function meepleMovesTo(arr, m, row) {
+  // It's definitely possible that this will be buggy if it receives an array of < 3 items
+  // Should be fairly simple to fix and probably shouldn't come up unless someone
+  // jams all the meeples into the corner.
+  let meeplePosition = row ? m.xPos : m.yPos;
+  let closestSmallerIndex = 0;
+  let closestLargerIndex = 1;
+  while (arr[closestLargerIndex] < meeplePosition) {
+    closestSmallerIndex++;
+    closestLargerIndex++;
+  }
+  return [arr[closestSmallerIndex], arr[closestLargerIndex]]
 }
 
 function calculateBlockers(row) {
@@ -171,7 +183,7 @@ function calculateBlockers(row) {
       }
     }
   }
-  
+
   for (let i = 0; i < game.meeples.length; i++) {
     let meepleBeingChecked = game.meeples[i];
     let checkingChannel = row ? meepleBeingChecked.yPos : meepleBeingChecked.xPos;
@@ -188,7 +200,6 @@ function calculateBlockers(row) {
       }
     }
   }
-
   return blockers.sort(function(a, b) {
     return a - b;
   });
