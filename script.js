@@ -117,6 +117,7 @@ function buttonSetUp() {
 
     abilityButton.addEventListener("click", function () {
       activateMeeple(game.meeples[i]);
+      game.meeples[i].abilityActive = true;
       meepleAbility();
     });
   }
@@ -225,7 +226,7 @@ function findActive() {
   }
 }
 
-//findActiveMeeple
+//findActiveAbility
 function findActiveAbility() {
   for (let i = 0; i < game.meeples.length; i++) {
     if (game.meeples[i].abilityActive) {
@@ -245,6 +246,14 @@ function activateMeeple(m) {
           .classList.remove("active");
     console.log(m.name);
   }
+}
+
+//activateMeepleAbility
+function activateMeepleAbility(m) {
+  for (let i = 0; i < game.meeples.length; i++) {
+      game.meeples[i].abilityActive = false
+  }
+  m.abilityActive = true;
 }
 
 function targetHit() {
