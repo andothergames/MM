@@ -37,10 +37,10 @@ function drawBoard() {
   
   function drawWarps() {
   //warp points
-  drawCircle("cornflowerblue", 3 * game.blockSize, 3 * game.blockSize, game.blockSize, 4);
-  drawCircle("cornflowerblue", 7 * game.blockSize, 7 * game.blockSize, game.blockSize, 4);
-  drawCircle("cornflowerblue", 10 * game.blockSize, 10 * game.blockSize, game.blockSize, 4);
-  drawCircle("cornflowerblue", 14 * game.blockSize, 14 * game.blockSize, game.blockSize, 4);
+  drawCircle("cornflowerblue", game.warps[0].x * game.blockSize, game.warps[0].y * game.blockSize, game.blockSize, 4);
+  drawCircle("cornflowerblue", game.warps[1].x * game.blockSize, game.warps[1].y * game.blockSize, game.blockSize, 4);
+  drawCircle("cornflowerblue", game.warps[2].x * game.blockSize, game.warps[2].y * game.blockSize, game.blockSize, 4);
+  drawCircle("cornflowerblue", game.warps[3].x * game.blockSize, game.warps[3].y * game.blockSize, game.blockSize, 4);
   }
   
   function drawWalls() {

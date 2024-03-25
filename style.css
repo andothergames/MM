@@ -67,6 +67,10 @@ button {
     rgba(240, 46, 170, 0.05) 0px 10px;
 }
 
+.abutton .active {
+  border: black 1px solid;
+}
+
 #forrestjump {
   background-color: aquamarine;
 }

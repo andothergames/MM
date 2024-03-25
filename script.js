@@ -14,24 +14,21 @@ const game = {
     meepleYellow,
     meepleBlack,
   ],
+  warps: [
+    { x: 3, y: 3 },
+    { x: 7, y: 7 },
+    { x: 10, y: 10 },
+    { x: 14, y: 14 },
+  ],
   winningMeeples: [],
-  buttons: []
+  buttons: [],
 };
 
 let board;
 let context;
 
-const buttonGreenab = document.getElementById("forrestjumpab");
-const buttonGreyab = document.getElementById("ozzymosisab");
-const buttonBlueab = document.getElementById("bluebeamerab");
-const buttonBrownab = document.getElementById("shortstopab");
-const buttonRedab = document.getElementById("sidestepab");
-const buttonWhiteab = document.getElementById("skewtab");
-const buttonYellowab = document.getElementById("mcedgeab");
-const buttonBlackab = document.getElementById("carbonab");
-
 document.addEventListener("keypress", function (e) {
-  switch(e.code) {
+  switch (e.code) {
     case "Digit1":
     case "Numpad1":
       activateMeeple(meepleGreen);
@@ -84,7 +81,6 @@ function initialise() {
 }
 
 function update() {
-
   //gameover
   if (targetHit()) {
     const reachedMeeple = findActive();
@@ -110,29 +106,34 @@ function update() {
   }
 }
 
-//FUNCTIONS
-// 
 function buttonSetUp() {
   for (let i = 0; i < game.meeples.length; i++) {
     const selectionButton = document.getElementById(game.meeples[i].name);
     const abilityButton = document.getElementById(`${game.meeples[i].name}ab`);
 
-    selectionButton.addEventListener("click", function() {
+    selectionButton.addEventListener("click", function () {
       activateMeeple(game.meeples[i]);
-    })
+    });
 
-    abilityButton.addEventListener("click", function() {
+    abilityButton.addEventListener("click", function () {
       activateMeeple(game.meeples[i]);
-      console.log('ability functionality will go here')
-    })
+      activateMeepleAbility(game.meeples[i]);
+    });
   }
 }
 
 //movement
 function move(e) {
   let m = findActive();
+  let boundaries;
 
-  let boundaries = calculateLimits();
+  if (m.abilityActive) {
+    boundaries = meepleAbility(m.name)
+  }
+  else {
+    boundaries = calculateLimits();
+  }
+
   switch (e.code) {
     case "ArrowUp":
       m.yPos = boundaries.upper;
@@ -192,24 +193,23 @@ function calculateLimits() {
     if (!game.meeples[i].isActive) {
       //columns
       if (game.meeples[i].xPos === c) {
-      if (game.meeples[i].yPos >= limits.upper && game.meeples[i].yPos < r) {
-        limits.upper = game.meeples[i].yPos + 1;
+        if (game.meeples[i].yPos >= limits.upper && game.meeples[i].yPos < r) {
+          limits.upper = game.meeples[i].yPos + 1;
+        }
+        if (game.meeples[i].yPos <= limits.lower && game.meeples[i].yPos > r) {
+          limits.lower = game.meeples[i].yPos - 1;
+        }
       }
-      if (game.meeples[i].yPos <= limits.lower && game.meeples[i].yPos > r) {
-        limits.lower = game.meeples[i].yPos - 1;
+      //rows
+      if (game.meeples[i].yPos === r) {
+        if (game.meeples[i].xPos >= limits.left && game.meeples[i].xPos < c) {
+          limits.left = game.meeples[i].xPos + 1;
+        }
+        if (game.meeples[i].xPos <= limits.right && game.meeples[i].xPos > c) {
+          limits.right = game.meeples[i].xPos - 1;
+        }
       }
     }
-     //rows
-    if (game.meeples[i].yPos === r) {
-
-      if (game.meeples[i].xPos >= limits.left && game.meeples[i].xPos < c) {
-        limits.left = game.meeples[i].xPos + 1;
-      }
-      if (game.meeples[i].xPos <= limits.right && game.meeples[i].xPos > c) {
-        limits.right = game.meeples[i].xPos - 1;
-      }
-    }    
-  }
   }
   return limits;
 }
@@ -218,11 +218,9 @@ function calculateLimits() {
 function calculateTargetPosition() {
   game.targetX = Math.floor(Math.random() * game.boardSize);
   game.targetY = Math.floor(Math.random() * game.boardSize);
-  for (let i = 0; i < game.meeples.length; i++) {
-    if (game.meeples[i].xPos === game.targetX && game.meeples[i].yPos === game.targetY) {
-      calculateTargetPosition();
-    }
-  }  
+  if (!squareIsEmpty(game.targetX, game.targetY)) {
+    calculateTargetPosition();
+  }
 }
 
 //findActiveMeeple
@@ -234,13 +232,34 @@ function findActive() {
   }
 }
 
+//findActiveAbility
+function findActiveAbility() {
+  for (let i = 0; i < game.meeples.length; i++) {
+    if (game.meeples[i].abilityActive) {
+      return game.meeples[i];
+    }
+  }
+}
 
 //activateMeeples
 function activateMeeple(m) {
   for (let i = 0; i < game.meeples.length; i++) {
-    game.meeples[i].isActive = (m === game.meeples[i]);
-    game.meeples[i].isActive ? document.getElementById(game.meeples[i].name).classList.add('active') : document.getElementById(game.meeples[i].name).classList.remove('active')
-  }  
+    game.meeples[i].isActive = m === game.meeples[i];
+    game.meeples[i].isActive
+      ? document.getElementById(game.meeples[i].name).classList.add("active")
+      : document
+          .getElementById(game.meeples[i].name)
+          .classList.remove("active");
+    console.log(m.name);
+  }
+}
+
+//activateMeepleAbility
+function activateMeepleAbility(m) {
+  for (let i = 0; i < game.meeples.length; i++) {
+      game.meeples[i].abilityActive = false
+  }
+  m.abilityActive = true;
 }
 
 function targetHit() {
@@ -254,26 +273,84 @@ function targetHit() {
 
 //target reached style
 function reachedTargetStyle(m) {
-  const meeplehtml = document.getElementById(`${m.name}t`)
+  const meeplehtml = document.getElementById(`${m.name}t`);
   meeplehtml.style.opacity = 1;
+}
+
+//meepleAbility
+function meepleAbility() {
+  const m = findActive();
+
+  if (m.name === "forrestjump") {
+    const dir = validSquaresGreenAbility(m);
+    console.log(dir);
+    highlightAbilitySquares(dir);
+  }
+  if (m.name === "ozzymosis") {
+    const dir = validSquaresGreyAbility(m);
+    highlightAbilitySquares(dir);
+  }
+  if (m.name === "bluebeamer") {
+    const dir = validSquaresBlueAbility(m);
+    highlightAbilitySquares(dir);
+  }
+  if (m.name === "shortstop") {
+    const dir = validSquaresRedAbility(m);
+    highlightAbilitySquares(dir);
+  }
+  if (m.name === "sidestep") {
+    const dir = validSquaresBrownAbility(m);
+    highlightAbilitySquares(dir);
+  }
+  if (m.name === "skewt") {
+    const dir = validSquaresWhiteAbility(m);
+    highlightAbilitySquares(dir);
+  }
+  if (m.name === "mcedge") {
+    const dir = validSquaresYellowAbility(m);
+    highlightAbilitySquares(dir);
+  }
+  if (m.name === "carbon") {
+    const dir = validSquaresBlackAbility(m);
+    highlightAbilitySquares(dir);
+  }
+}
+
+//ability used style
+function abilityUsedStyle(m) {
+  const meeplehtml = document.getElementById(`${m.name}ab`);
+  meeplehtml.innerText = "★";
+}
+
+function highlightAbilitySquares(dir) {
+  context.fillStyle = "pink";
+
+  for (let key in dir) {
+    context.fillRect(
+      dir[key].x * game.blockSize,
+      dir[key].y * game.blockSize,
+      game.blockSize,
+      game.blockSize
+    );
+  }
 }
 
 //winningDisplay
 function win() {
-  console.log(game.winningMeeples)
+  console.log(game.winningMeeples);
   if (game.winningMeeples.length === 6) {
-    game.gameOver = true
-    alert('you have won!')
+    game.gameOver = true;
+    alert("you have won!");
   }
   return;
 }
 
 function tinkering() {
-  board.addEventListener('click', function(e) {
+  board.addEventListener("click", function (e) {
     let x = Math.floor(e.offsetX / game.blockSize);
     let y = Math.floor(e.offsetY / game.blockSize);
     if (x === game.targetX && y === game.targetY) {
-      let successSound = new Audio('success.mp3');
+      let successSound = new Audio("success.mp3");
       successSound.play();
     }
     for (let i = 0; i < game.meeples.length; i++) {
@@ -283,5 +360,124 @@ function tinkering() {
       }
     }
     console.log(x + " - " + y);
-  })
+  });
+}
+
+//function for checking square is legal
+function squareIsValid(x, y) {
+  return squareIsEmpty(x, y) && squareIsInBounds(x, y);
+}
+
+//function for iterating over meeples coords to see if square empty
+function squareIsEmpty(x, y) {
+  for (let i = 0; i < game.meeples.length; i++) {
+    if (game.meeples[i].xPos === x && game.meeples[i].yPos === y) {
+      return false;
+    }
+  }
+  return true;
+}
+
+//function for checking if in wall bounds
+function squareIsInBounds(x, y) {
+  if (x < 0 || y < 0 || x > game.boardSize - 1 || y > game.boardSize - 1) {
+    return false;
+  }
+  if (x === 0 && y === 0) {
+    return false;
+  }
+  if (x === game.boardSize - 1 && y === game.boardSize - 1) {
+    return false;
+  }
+  return true;
+  }
+
+//valid squares functions
+
+function validSquaresGreenAbility(meeple) {
+  const dir = {};
+
+  if (squareIsValid(meeple.xPos, meeple.yPos - 3)) {
+    dir.up = { x: meeple.xPos, y: meeple.yPos - 3 };
+  }
+  if (squareIsValid(meeple.xPos, meeple.yPos + 3)) {
+    dir.down = { x: meeple.xPos, y: meeple.yPos + 3 };
+  }
+  if (squareIsValid(meeple.xPos - 3, meeple.yPos)) {
+    dir.left = { x: meeple.xPos - 3, y: meeple.yPos };
+  }
+  if (squareIsValid(meeple.xPos + 3, meeple.yPos)) {
+    dir.right = { x: meeple.xPos + 3, y: meeple.yPos };
+  }
+  return dir;
+}
+
+function validSquaresRedAbility(meeple) {
+  const dir = {};
+
+  if (squareIsValid(meeple.xPos, meeple.yPos - 1)) {
+    dir.up = { x: meeple.xPos, y: meeple.yPos - 1 };
+  }
+  if (squareIsValid(meeple.xPos, meeple.yPos + 1)) {
+    dir.down = { x: meeple.xPos, y: meeple.yPos + 1 };
+  }
+  if (squareIsValid(meeple.xPos - 1, meeple.yPos)) {
+    dir.left = { x: meeple.xPos - 1, y: meeple.yPos };
+  }
+  if (squareIsValid(meeple.xPos + 1, meeple.yPos)) {
+    dir.right = { x: meeple.xPos + 1, y: meeple.yPos };
+  }
+  return dir;
+}
+
+function validSquaresWhiteAbility(meeple) {
+  const dir = {};
+
+  if (squareIsValid(meeple.xPos + 1, meeple.yPos - 1)) {
+    dir.up = { x: meeple.xPos + 1, y: meeple.yPos - 1 };
+  }
+  if (squareIsValid(meeple.xPos + 1, meeple.yPos + 1)) {
+    dir.down = { x: meeple.xPos + 1, y: meeple.yPos + 1 };
+  }
+  if (squareIsValid(meeple.xPos - 1, meeple.yPos + 1)) {
+    dir.left = { x: meeple.xPos - 1, y: meeple.yPos + 1 };
+  }
+  if (squareIsValid(meeple.xPos - 1, meeple.yPos - 1)) {
+    dir.right = { x: meeple.xPos - 1, y: meeple.yPos - 1 };
+  }
+  return dir;
+}
+
+function validSquaresBlueAbility(meeple) {
+  const dir = {};
+
+  if (squareIsValid(game.warps[0].x, game.warps[0].y)) {
+    dir.up = { x: game.warps[0].x, y: game.warps[0].y };
+  }
+  if (squareIsValid(game.warps[1].x, game.warps[1].y)) {
+    dir.down = { x: game.warps[1].x, y: game.warps[1].y };
+  }
+  if (squareIsValid(game.warps[2].x, game.warps[2])) {
+    dir.left = { x: game.warps[2].x, y: game.warps[2].y };
+  }
+  if (squareIsValid(game.warps[3].x, game.warps[3].y)) {
+    dir.right = { x: game.warps[3].x, y: game.warps[3].y };
+  }
+  return dir;
+}
+
+function validSquaresGreyAbility(meeple) {
+  console.log("shouldnt be in here");
+}
+
+function validSquaresBrownAbility(meeple) {
+  console.log(meeple.name);
+}
+
+function validSquaresYellowAbility(meeple) {
+  console.log(meeple.name);
+}
+
+function validSquaresBlackAbility(meeple) {
+  console.log(meeple.name);
 }
