@@ -100,3 +100,29 @@ button {
   background-color: darkslategrey;
   color: white;
 }
+
+.popup {
+  display: none;
+  position: fixed;
+  width: 75%;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  /* background-color: #000000; */
+  padding: 15px;
+  background:rgba(0,0,0,0.7);
+}
+
+.link {
+  text-decoration: underline; 
+}
+
+.link:hover {
+  color:yellow;
+  cursor: pointer;
+}
+
+#ability-instructions {
+  list-style-type: none;
+  text-align: left;
+}
