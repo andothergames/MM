@@ -118,7 +118,6 @@ function buttonSetUp() {
     abilityButton.addEventListener("click", function () {
       activateMeeple(game.meeples[i]);
       activateMeepleAbility(game.meeples[i]);
-      meepleAbility();
     });
   }
 }
@@ -126,8 +125,15 @@ function buttonSetUp() {
 //movement
 function move(e) {
   let m = findActive();
+  let boundaries;
 
-  let boundaries = calculateLimits();
+  if (m.abilityActive) {
+    boundaries = meepleAbility(m.name)
+  }
+  else {
+    boundaries = calculateLimits();
+  }
+
   switch (e.code) {
     case "ArrowUp":
       m.yPos = boundaries.upper;
