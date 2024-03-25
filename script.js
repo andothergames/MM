@@ -211,10 +211,10 @@ function calculateLimits() {
 function calculateTargetPosition() {
   game.targetX = Math.floor(Math.random() * game.boardSize);
   game.targetY = Math.floor(Math.random() * game.boardSize);
-  if(!squareIsEmpty(game.targetX, game.targetY)){
-      calculateTargetPosition();
-    }
+  if (!squareIsEmpty(game.targetX, game.targetY)) {
+    calculateTargetPosition();
   }
+}
 
 //findActiveMeeple
 function findActive() {
@@ -234,7 +234,7 @@ function activateMeeple(m) {
       : document
           .getElementById(game.meeples[i].name)
           .classList.remove("active");
-          console.log(m.name);
+    console.log(m.name);
   }
 }
 
@@ -256,41 +256,40 @@ function reachedTargetStyle(m) {
 //meepleAbility
 function meepleAbility() {
   const m = findActive();
-  
+
   if (m.name === "forrestjump") {
-    const dir = validSquaresGreenAbility(m)
+    const dir = validSquaresGreenAbility(m);
     console.log(dir);
     highlightAbilitySquares(dir);
-  };
+  }
   if (m.name === "ozzymosis") {
-    const dir = validSquaresGreyAbility(m)
+    const dir = validSquaresGreyAbility(m);
     highlightAbilitySquares(dir);
-  };
+  }
   if (m.name === "bluebeamer") {
-    const dir = validSquaresBlueAbility(m)
+    const dir = validSquaresBlueAbility(m);
     highlightAbilitySquares(dir);
-  };
+  }
   if (m.name === "shortstop") {
-    const dir = validSquaresRedAbility(m)
+    const dir = validSquaresRedAbility(m);
     highlightAbilitySquares(dir);
-  };
+  }
   if (m.name === "sidestep") {
-    const dir = validSquaresBrownAbility(m)
+    const dir = validSquaresBrownAbility(m);
     highlightAbilitySquares(dir);
-  };
+  }
   if (m.name === "skewt") {
-    const dir = validSquaresWhiteAbility(m)
+    const dir = validSquaresWhiteAbility(m);
     highlightAbilitySquares(dir);
-  };
+  }
   if (m.name === "mcedge") {
-    const dir = validSquaresYellowAbility(m)
+    const dir = validSquaresYellowAbility(m);
     highlightAbilitySquares(dir);
-  };
+  }
   if (m.name === "carbon") {
-    const dir = validSquaresBlackAbility(m)
+    const dir = validSquaresBlackAbility(m);
     highlightAbilitySquares(dir);
-  };
-  
+  }
 }
 
 //ability used style
@@ -301,7 +300,7 @@ function abilityUsedStyle(m) {
 
 function highlightAbilitySquares(dir) {
   context.fillStyle = "pink";
-    
+
   for (let key in dir) {
     context.fillRect(
       dir[key].x * game.blockSize,
@@ -309,7 +308,7 @@ function highlightAbilitySquares(dir) {
       game.blockSize,
       game.blockSize
     );
-  };
+  }
 }
 
 //winningDisplay
@@ -342,8 +341,7 @@ function tinkering() {
 
 //function for checking square is legal
 function squareIsValid(x, y) {
-  return squareIsEmpty(x, y); 
-  //&& squareIsInBounds(x, y);
+  return squareIsEmpty(x, y) && squareIsInBounds(x, y);
 }
 
 //function for iterating over meeples coords to see if square empty
@@ -357,7 +355,18 @@ function squareIsEmpty(x, y) {
 }
 
 //function for checking if in wall bounds
-function squareIsInBounds(x, y) {}
+function squareIsInBounds(x, y) {
+  if (x < 0 || y < 0 || x > game.boardSize - 1 || y > game.boardSize - 1) {
+    return false;
+  }
+  if (x === 0 && y === 0) {
+    return false;
+  }
+  if (x === game.boardSize - 1 && y === game.boardSize - 1) {
+    return false;
+  }
+  return true;
+  }
 
 //valid squares functions
 
@@ -434,17 +443,17 @@ function validSquaresBlueAbility(meeple) {
 }
 
 function validSquaresGreyAbility(meeple) {
-  console.log('shouldnt be in here')
+  console.log("shouldnt be in here");
 }
 
 function validSquaresBrownAbility(meeple) {
-  console.log(meeple.name)
+  console.log(meeple.name);
 }
 
 function validSquaresYellowAbility(meeple) {
-  console.log(meeple.name)
+  console.log(meeple.name);
 }
 
 function validSquaresBlackAbility(meeple) {
-  console.log(meeple.name)
+  console.log(meeple.name);
 }
