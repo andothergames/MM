@@ -117,7 +117,7 @@ function buttonSetUp() {
 
     abilityButton.addEventListener("click", function () {
       activateMeeple(game.meeples[i]);
-      game.meeples[i].abilityActive = true;
+      activateMeepleAbility(game.meeples[i]);
       meepleAbility();
     });
   }
