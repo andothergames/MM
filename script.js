@@ -225,6 +225,15 @@ function findActive() {
   }
 }
 
+//findActiveMeeple
+function findActiveAbility() {
+  for (let i = 0; i < game.meeples.length; i++) {
+    if (game.meeples[i].abilityActive) {
+      return game.meeples[i];
+    }
+  }
+}
+
 //activateMeeples
 function activateMeeple(m) {
   for (let i = 0; i < game.meeples.length; i++) {
