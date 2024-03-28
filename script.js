@@ -1,5 +1,6 @@
 const game = {
   blockSize: 25,
+  blockSizeOffset: 1,
   boardSize: 18,
   targetX: 0,
   targetY: 0,
@@ -14,24 +15,23 @@ const game = {
     meepleYellow,
     meepleBlack,
   ],
+  warpColour: "cornflowerblue",
+  warps: [
+    { x: 3, y: 3 },
+    { x: 7, y: 7 },
+    { x: 10, y: 10 },
+    { x: 14, y: 14 },
+  ],
+  wallColour: "MidnightBlue",
+  wallWidth: 4,
   winningMeeples: [],
-  buttons: []
 };
 
 let board;
 let context;
 
-const buttonGreenab = document.getElementById("forrestjumpab");
-const buttonGreyab = document.getElementById("ozzymosisab");
-const buttonBlueab = document.getElementById("bluebeamerab");
-const buttonBrownab = document.getElementById("shortstopab");
-const buttonRedab = document.getElementById("sidestepab");
-const buttonWhiteab = document.getElementById("skewtab");
-const buttonYellowab = document.getElementById("mcedgeab");
-const buttonBlackab = document.getElementById("carbonab");
-
 document.addEventListener("keypress", function (e) {
-  switch(e.code) {
+  switch (e.code) {
     case "Digit1":
     case "Numpad1":
       activateMeeple(meepleGreen);
@@ -74,7 +74,6 @@ window.onload = function () {
 
 function initialise() {
   board = document.getElementById("board");
-  tinkering();
   board.height = game.boardSize * game.blockSize;
   board.width = game.boardSize * game.blockSize;
   context = board.getContext("2d");
@@ -84,264 +83,177 @@ function initialise() {
 }
 
 function update() {
-
-  //gameover
   if (targetHit()) {
-    const reachedMeeple = findActive();
-    reachedMeeple.abilityUsed = true;
-    game.winningMeeples.push(reachedMeeple.name);
-    reachedTargetStyle(reachedMeeple);
-    win();
+    const activeMeeple = getActiveMeeple();
+    if (!activeMeeple.reachedTarget) {
+      activeMeeple.reachedTarget = true;
+      game.winningMeeples.push(activeMeeple.name);
+      applyReachedTargetStyle(activeMeeple);
+    }
+    game.gameOver = checkForGameWon();
+    if (game.gameOver) {
+      alert('you have won!')
+    }
     calculateTargetPosition();
   }
 
-  //board
   drawBoard();
+  drawMeeples();
+}
 
-  //draw game.meeples
+//findActiveAbility
+function findActiveAbility() {
   for (let i = 0; i < game.meeples.length; i++) {
-    context.fillStyle = game.meeples[i].color;
+    if (game.meeples[i].abilityActive) {
+      return game.meeples[i];
+    }
+  }
+}
+
+//meepleAbility
+function meepleAbility() {
+  const m = getActiveMeeple();
+
+  if (m.name === "forrestjump") {
+    const dir = validSquaresGreenAbility(m);
+    console.log(dir);
+    highlightAbilitySquares(dir);
+  }
+  if (m.name === "ozzymosis") {
+    const dir = validSquaresGreyAbility(m);
+    highlightAbilitySquares(dir);
+  }
+  if (m.name === "bluebeamer") {
+    const dir = validSquaresBlueAbility(m);
+    highlightAbilitySquares(dir);
+  }
+  if (m.name === "shortstop") {
+    const dir = validSquaresRedAbility(m);
+    highlightAbilitySquares(dir);
+  }
+  if (m.name === "sidestep") {
+    const dir = validSquaresBrownAbility(m);
+    highlightAbilitySquares(dir);
+  }
+  if (m.name === "skewt") {
+    const dir = validSquaresWhiteAbility(m);
+    highlightAbilitySquares(dir);
+  }
+  if (m.name === "mcedge") {
+    const dir = validSquaresYellowAbility(m);
+    highlightAbilitySquares(dir);
+  }
+  if (m.name === "carbon") {
+    const dir = validSquaresBlackAbility(m);
+    highlightAbilitySquares(dir);
+  }
+}
+
+//ability used style
+function abilityUsedStyle(m) {
+  const meeplehtml = document.getElementById(`${m.name}ab`);
+  meeplehtml.innerText = "★";
+}
+
+function highlightAbilitySquares(dir) {
+  context.fillStyle = "pink";
+
+  for (let key in dir) {
     context.fillRect(
-      game.meeples[i].xPos * game.blockSize,
-      game.meeples[i].yPos * game.blockSize,
+      dir[key].x * game.blockSize,
+      dir[key].y * game.blockSize,
       game.blockSize,
       game.blockSize
     );
   }
 }
 
-//FUNCTIONS
-// 
-function buttonSetUp() {
-  for (let i = 0; i < game.meeples.length; i++) {
-    const selectionButton = document.getElementById(game.meeples[i].name);
-    const abilityButton = document.getElementById(`${game.meeples[i].name}ab`);
+//valid squares functions
 
-    selectionButton.addEventListener("click", function() {
-      activateMeeple(game.meeples[i]);
-    })
+function validSquaresGreenAbility(meeple) {
+  const dir = {};
 
-    abilityButton.addEventListener("click", function() {
-      activateMeeple(game.meeples[i]);
-      console.log('ability functionality will go here')
-    })
+  if (squareIsValid(meeple.xPos, meeple.yPos - 3)) {
+    dir.up = { x: meeple.xPos, y: meeple.yPos - 3 };
   }
-}
-
-//movement
-function move(e) {
-  let m = findActive();
-
-  let boundaries = calculateLimits();
-
-  switch (e.code) {
-    case "ArrowUp":
-      m.yPos = boundaries.upper;
-      break;
-    case "ArrowDown":
-      m.yPos = boundaries.lower;
-      break;
-    case "ArrowLeft":
-      m.xPos = boundaries.left;
-      break;
-    case "ArrowRight":
-      m.xPos = boundaries.right;
-      break;
+  if (squareIsValid(meeple.xPos, meeple.yPos + 3)) {
+    dir.down = { x: meeple.xPos, y: meeple.yPos + 3 };
   }
-  update();
-}
-
-// function meepleMovesTo(arr, m, row) {
-//   // It's definitely possible that this will be buggy if it receives an array of < 3 items
-//   // Should be fairly simple to fix and probably shouldn't come up unless someone
-//   // jams all the meeples into the corner.
-//   // The early return might fix it tho!
-//   if (arr.length < 3) return arr;
-//   let meeplePosition = row ? m.xPos : m.yPos;
-//   let closestSmallerIndex = 0;
-//   let closestLargerIndex = 1;
-//   while (arr[closestLargerIndex] < meeplePosition) {
-//     closestSmallerIndex++;
-//     closestLargerIndex++;
-//   }
-//   return [arr[closestSmallerIndex], arr[closestLargerIndex]]
-// }
-
-// function calculateBlockers(row) {
-//   let m = findActive();
-  
-//   let blockers = [0, game.boardSize - 1]
-//   let activeChannel = row ? m.yPos : m.xPos;
-//   let positionInActiveChannel = row ? m.xPos : m.yPos;
-
-//   if (activeChannel === 0) blockers[0] = 1;
-//   if (activeChannel === game.boardSize - 1) blockers[1] = game.boardSize - 2;
-
-//   for (let i = 0; i < boardStructure.length; i++) {
-//     if(boardStructure[i].row === row && boardStructure[i].existson === activeChannel) {
-//       if (boardStructure[i].after < positionInActiveChannel) {
-//         blockers.push(boardStructure[i].after + 1);
-//       } else if (boardStructure[i].after >= positionInActiveChannel) {
-//         blockers.push(boardStructure[i].after);
-//       }
-//     }
-//   }
-
-//   for (let i = 0; i < game.meeples.length; i++) {
-//     let meepleBeingChecked = game.meeples[i];
-//     let checkingChannel = row ? meepleBeingChecked.yPos : meepleBeingChecked.xPos;
-//     let positionInChannel = row ? meepleBeingChecked.xPos : meepleBeingChecked.yPos;
-//     if (checkingChannel === activeChannel && game.meeples[i].name !== m.name) {
-//       if (positionInChannel < positionInActiveChannel) {
-//         blockers.push(positionInChannel + 1);
-//       } else {
-//         blockers.push(positionInChannel - 1);
-//       }
-//       if (blockers.indexOf(positionInChannel) !== -1) {
-//         let index = blockers.indexOf(positionInChannel);
-//         blockers.splice(index, 1);
-//       }
-//     }
-//   }
-
-//   return blockers.sort(function(a, b) {
-//     return a - b;
-//   });
-// }
-
-function calculateLimits() {
-  let m = findActive();
-  let r = m.yPos;
-  let c = m.xPos;
-  
-  let limits = {
-    upper: 0,
-    lower: game.boardSize - 1,
-    left: 0,
-    right: game.boardSize - 1,
-  };
-  if (m.xPos == 0) limits.upper = 1;
-  if (m.xPos == game.boardSize - 1) limits.lower = game.boardSize - 2;
-  if (m.yPos == 0) limits.left = 1;
-  if (m.yPos == game.boardSize - 1) limits.right = game.boardSize - 2;
-
-  for (let i = 0; i < boardStructure.length; i++) {
-    let wall = boardStructure[i];
-    //columns
-    if (!wall.row && wall.existson == m.xPos) {
-      if (wall.after >= limits.upper && wall.after < m.yPos) {
-        limits.upper = wall.after + 1;
-      }
-      if (wall.after < limits.lower && wall.after >= m.yPos) {
-        limits.lower = wall.after;
-      }
-    }
-
-    //rows
-    if (wall.row && wall.existson == m.yPos) {
-      if (wall.after >= limits.left && wall.after < m.xPos) {
-        limits.left = wall.after + 1;
-      }
-      if (wall.after < limits.right && wall.after >= m.xPos) {
-        limits.right = wall.after;
-      }
-    }
+  if (squareIsValid(meeple.xPos - 3, meeple.yPos)) {
+    dir.left = { x: meeple.xPos - 3, y: meeple.yPos };
   }
-
-  for (let i = 0; i < game.meeples.length; i++) {
-    if (!game.meeples[i].isActive) {
-      //columns
-      if (game.meeples[i].xPos === c) {
-      if (game.meeples[i].yPos >= limits.upper && game.meeples[i].yPos < r) {
-        limits.upper = game.meeples[i].yPos + 1;
-      }
-      if (game.meeples[i].yPos <= limits.lower && game.meeples[i].yPos > r) {
-        limits.lower = game.meeples[i].yPos - 1;
-      }
-    }
-     //rows
-    if (game.meeples[i].yPos === r) {
-
-      if (game.meeples[i].xPos >= limits.left && game.meeples[i].xPos < c) {
-        limits.left = game.meeples[i].xPos + 1;
-      }
-      if (game.meeples[i].xPos <= limits.right && game.meeples[i].xPos > c) {
-        limits.right = game.meeples[i].xPos - 1;
-      }
-    }    
+  if (squareIsValid(meeple.xPos + 3, meeple.yPos)) {
+    dir.right = { x: meeple.xPos + 3, y: meeple.yPos };
   }
+  return dir;
+}
+
+function validSquaresRedAbility(meeple) {
+  const dir = {};
+
+  if (squareIsValid(meeple.xPos, meeple.yPos - 1)) {
+    dir.up = { x: meeple.xPos, y: meeple.yPos - 1 };
   }
-  return limits;
-}
-
-//randomise target
-function calculateTargetPosition() {
-  game.targetX = Math.floor(Math.random() * game.boardSize);
-  game.targetY = Math.floor(Math.random() * game.boardSize);
-  for (let i = 0; i < game.meeples.length; i++) {
-    if (game.meeples[i].xPos === game.targetX && game.meeples[i].yPos === game.targetY) {
-      calculateTargetPosition();
-    }
-  }  
-}
-
-//findActiveMeeple
-function findActive() {
-  for (let i = 0; i < game.meeples.length; i++) {
-    if (game.meeples[i].isActive) {
-      return game.meeples[i];
-    }
+  if (squareIsValid(meeple.xPos, meeple.yPos + 1)) {
+    dir.down = { x: meeple.xPos, y: meeple.yPos + 1 };
   }
-}
-
-
-//activateMeeples
-function activateMeeple(m) {
-  for (let i = 0; i < game.meeples.length; i++) {
-    game.meeples[i].isActive = (m === game.meeples[i]);
-    game.meeples[i].isActive ? document.getElementById(game.meeples[i].name).classList.add('active') : document.getElementById(game.meeples[i].name).classList.remove('active')
-  }  
-}
-
-function targetHit() {
-  let active = findActive();
-  if (active === undefined) return false;
-  if (active.reachedTarget) return false;
-  let x = active.xPos;
-  let y = active.yPos;
-  return x === game.targetX && y === game.targetY;
-}
-
-//target reached style
-function reachedTargetStyle(m) {
-  const meeplehtml = document.getElementById(`${m.name}t`)
-  meeplehtml.style.opacity = 1;
-}
-
-//winningDisplay
-function win() {
-  console.log(game.winningMeeples)
-  if (game.winningMeeples.length === 6) {
-    game.gameOver = true
-    alert('you have won!')
+  if (squareIsValid(meeple.xPos - 1, meeple.yPos)) {
+    dir.left = { x: meeple.xPos - 1, y: meeple.yPos };
   }
-  return;
+  if (squareIsValid(meeple.xPos + 1, meeple.yPos)) {
+    dir.right = { x: meeple.xPos + 1, y: meeple.yPos };
+  }
+  return dir;
 }
 
-function tinkering() {
-  board.addEventListener('click', function(e) {
-    let x = Math.floor(e.offsetX / game.blockSize);
-    let y = Math.floor(e.offsetY / game.blockSize);
-    if (x === game.targetX && y === game.targetY) {
-      let successSound = new Audio('success.mp3');
-      successSound.play();
-    }
-    for (let i = 0; i < game.meeples.length; i++) {
-      if (game.meeples[i].xPos === x && game.meeples[i].yPos === y) {
-        activateMeeple(game.meeples[i]);
-        break;
-      }
-    }
-    console.log(x + " - " + y);
-  })
+function validSquaresWhiteAbility(meeple) {
+  const dir = {};
+
+  if (squareIsValid(meeple.xPos + 1, meeple.yPos - 1)) {
+    dir.up = { x: meeple.xPos + 1, y: meeple.yPos - 1 };
+  }
+  if (squareIsValid(meeple.xPos + 1, meeple.yPos + 1)) {
+    dir.down = { x: meeple.xPos + 1, y: meeple.yPos + 1 };
+  }
+  if (squareIsValid(meeple.xPos - 1, meeple.yPos + 1)) {
+    dir.left = { x: meeple.xPos - 1, y: meeple.yPos + 1 };
+  }
+  if (squareIsValid(meeple.xPos - 1, meeple.yPos - 1)) {
+    dir.right = { x: meeple.xPos - 1, y: meeple.yPos - 1 };
+  }
+  return dir;
+}
+
+function validSquaresBlueAbility(meeple) {
+  const dir = {};
+
+  if (squareIsValid(game.warps[0].x, game.warps[0].y)) {
+    dir.up = { x: game.warps[0].x, y: game.warps[0].y };
+  }
+  if (squareIsValid(game.warps[1].x, game.warps[1].y)) {
+    dir.down = { x: game.warps[1].x, y: game.warps[1].y };
+  }
+  if (squareIsValid(game.warps[2].x, game.warps[2])) {
+    dir.left = { x: game.warps[2].x, y: game.warps[2].y };
+  }
+  if (squareIsValid(game.warps[3].x, game.warps[3].y)) {
+    dir.right = { x: game.warps[3].x, y: game.warps[3].y };
+  }
+  return dir;
+}
+
+function validSquaresGreyAbility(meeple) {
+  console.log("shouldnt be in here");
+}
+
+function validSquaresBrownAbility(meeple) {
+  console.log(meeple.name);
+}
+
+function validSquaresYellowAbility(meeple) {
+  console.log(meeple.name);
+}
+
+function validSquaresBlackAbility(meeple) {
+  console.log(meeple.name);
 }
