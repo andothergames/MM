@@ -187,5 +187,5 @@ function move(e) {
       m.xPos = boundaries.right;
       break;
   }
-  update();
+  updateVisuals();
 }

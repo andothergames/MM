@@ -79,10 +79,11 @@ function initialise() {
   context = board.getContext("2d");
   calculateTargetPosition();
   document.addEventListener("keyup", move);
-  update();
+  playGame();
 }
 
-function update() {
+function playGame() {
+  updateVisuals();
   if (targetHit()) {
     const activeMeeple = getActiveMeeple();
     if (!activeMeeple.reachedTarget) {
@@ -97,9 +98,25 @@ function update() {
     calculateTargetPosition();
   }
 
+  // attemptToReachTarget();
+  // In here we want to invoke a loop that will remain while 
+  // winningMeeples.length !=== 6.
+  // within that loop we can call attemptToReachTarget which itself can 
+  // loop/reset when the user needs
+
+  // One the target is hit on an attempt, we exit, add the meeple to the array
+  // Change any appropriate states and then go to the next iteration of the loop.
+
+  // atm, target hitting isn't being detected but that because of the 
+  // logic in the playGame() function
+
+}
+
+function updateVisuals() {
   drawBoard();
   drawMeeples();
 }
+
 
 //findActiveAbility
 function findActiveAbility() {
