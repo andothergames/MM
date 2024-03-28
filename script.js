@@ -1,5 +1,6 @@
 const game = {
   blockSize: 25,
+  blockSizeOffset: 1,
   boardSize: 18,
   targetX: 0,
   targetY: 0,
@@ -14,14 +15,16 @@ const game = {
     meepleYellow,
     meepleBlack,
   ],
+  warpColour: "cornflowerblue",
   warps: [
     { x: 3, y: 3 },
     { x: 7, y: 7 },
     { x: 10, y: 10 },
     { x: 14, y: 14 },
   ],
+  wallColour: "MidnightBlue",
+  wallWidth: 4,
   winningMeeples: [],
-  buttons: [],
 };
 
 let board;
@@ -71,7 +74,6 @@ window.onload = function () {
 
 function initialise() {
   board = document.getElementById("board");
-  tinkering();
   board.height = game.boardSize * game.blockSize;
   board.width = game.boardSize * game.blockSize;
   context = board.getContext("2d");
@@ -81,155 +83,22 @@ function initialise() {
 }
 
 function update() {
-  //gameover
   if (targetHit()) {
-    const reachedMeeple = findActive();
-    reachedMeeple.abilityUsed = true;
-    game.winningMeeples.push(reachedMeeple.name);
-    reachedTargetStyle(reachedMeeple);
-    win();
+    const activeMeeple = getActiveMeeple();
+    if (!activeMeeple.reachedTarget) {
+      activeMeeple.reachedTarget = true;
+      game.winningMeeples.push(activeMeeple.name);
+      applyReachedTargetStyle(activeMeeple);
+    }
+    game.gameOver = checkForGameWon();
+    if (game.gameOver) {
+      alert('you have won!')
+    }
     calculateTargetPosition();
   }
 
-  //board
   drawBoard();
-
-  //draw game.meeples
-  for (let i = 0; i < game.meeples.length; i++) {
-    context.fillStyle = game.meeples[i].color;
-    context.fillRect(
-      game.meeples[i].xPos * game.blockSize,
-      game.meeples[i].yPos * game.blockSize,
-      game.blockSize,
-      game.blockSize
-    );
-  }
-}
-
-function buttonSetUp() {
-  for (let i = 0; i < game.meeples.length; i++) {
-    const selectionButton = document.getElementById(game.meeples[i].name);
-    const abilityButton = document.getElementById(`${game.meeples[i].name}ab`);
-
-    selectionButton.addEventListener("click", function () {
-      activateMeeple(game.meeples[i]);
-    });
-
-    abilityButton.addEventListener("click", function () {
-      activateMeeple(game.meeples[i]);
-      activateMeepleAbility(game.meeples[i]);
-    });
-  }
-}
-
-//movement
-function move(e) {
-  let m = findActive();
-  let boundaries;
-
-  if (m.abilityActive) {
-    boundaries = meepleAbility(m.name)
-  }
-  else {
-    boundaries = calculateLimits();
-  }
-
-  switch (e.code) {
-    case "ArrowUp":
-      m.yPos = boundaries.upper;
-      break;
-    case "ArrowDown":
-      m.yPos = boundaries.lower;
-      break;
-    case "ArrowLeft":
-      m.xPos = boundaries.left;
-      break;
-    case "ArrowRight":
-      m.xPos = boundaries.right;
-      break;
-  }
-  update();
-}
-
-function calculateLimits() {
-  let m = findActive();
-  let r = m.yPos;
-  let c = m.xPos;
-  let limits = {
-    upper: 0,
-    lower: game.boardSize - 1,
-    left: 0,
-    right: game.boardSize - 1,
-  };
-  if (m.xPos == 0) limits.upper = 1;
-  if (m.xPos == game.boardSize - 1) limits.lower = game.boardSize - 2;
-  if (m.yPos == 0) limits.left = 1;
-  if (m.yPos == game.boardSize - 1) limits.right = game.boardSize - 2;
-
-  for (let i = 0; i < boardStructure.length; i++) {
-    let wall = boardStructure[i];
-    //columns
-    if (!wall.row && wall.existson == m.xPos) {
-      if (wall.after >= limits.upper && wall.after < m.yPos) {
-        limits.upper = wall.after + 1;
-      }
-      if (wall.after < limits.lower && wall.after >= m.yPos) {
-        limits.lower = wall.after;
-      }
-    }
-
-    //rows
-    if (wall.row && wall.existson == m.yPos) {
-      if (wall.after >= limits.left && wall.after < m.xPos) {
-        limits.left = wall.after + 1;
-      }
-      if (wall.after < limits.right && wall.after >= m.xPos) {
-        limits.right = wall.after;
-      }
-    }
-  }
-
-  for (let i = 0; i < game.meeples.length; i++) {
-    if (!game.meeples[i].isActive) {
-      //columns
-      if (game.meeples[i].xPos === c) {
-        if (game.meeples[i].yPos >= limits.upper && game.meeples[i].yPos < r) {
-          limits.upper = game.meeples[i].yPos + 1;
-        }
-        if (game.meeples[i].yPos <= limits.lower && game.meeples[i].yPos > r) {
-          limits.lower = game.meeples[i].yPos - 1;
-        }
-      }
-      //rows
-      if (game.meeples[i].yPos === r) {
-        if (game.meeples[i].xPos >= limits.left && game.meeples[i].xPos < c) {
-          limits.left = game.meeples[i].xPos + 1;
-        }
-        if (game.meeples[i].xPos <= limits.right && game.meeples[i].xPos > c) {
-          limits.right = game.meeples[i].xPos - 1;
-        }
-      }
-    }
-  }
-  return limits;
-}
-
-//randomise target
-function calculateTargetPosition() {
-  game.targetX = Math.floor(Math.random() * game.boardSize);
-  game.targetY = Math.floor(Math.random() * game.boardSize);
-  if (!squareIsEmpty(game.targetX, game.targetY)) {
-    calculateTargetPosition();
-  }
-}
-
-//findActiveMeeple
-function findActive() {
-  for (let i = 0; i < game.meeples.length; i++) {
-    if (game.meeples[i].isActive) {
-      return game.meeples[i];
-    }
-  }
+  drawMeeples();
 }
 
 //findActiveAbility
@@ -241,45 +110,9 @@ function findActiveAbility() {
   }
 }
 
-//activateMeeples
-function activateMeeple(m) {
-  for (let i = 0; i < game.meeples.length; i++) {
-    game.meeples[i].isActive = m === game.meeples[i];
-    game.meeples[i].isActive
-      ? document.getElementById(game.meeples[i].name).classList.add("active")
-      : document
-          .getElementById(game.meeples[i].name)
-          .classList.remove("active");
-    console.log(m.name);
-  }
-}
-
-//activateMeepleAbility
-function activateMeepleAbility(m) {
-  for (let i = 0; i < game.meeples.length; i++) {
-      game.meeples[i].abilityActive = false
-  }
-  m.abilityActive = true;
-}
-
-function targetHit() {
-  let active = findActive();
-  if (active === undefined) return false;
-  if (active.reachedTarget) return false;
-  let x = active.xPos;
-  let y = active.yPos;
-  return x === game.targetX && y === game.targetY;
-}
-
-//target reached style
-function reachedTargetStyle(m) {
-  const meeplehtml = document.getElementById(`${m.name}t`);
-  meeplehtml.style.opacity = 1;
-}
-
 //meepleAbility
 function meepleAbility() {
-  const m = findActive();
+  const m = getActiveMeeple();
 
   if (m.name === "forrestjump") {
     const dir = validSquaresGreenAbility(m);
@@ -334,63 +167,6 @@ function highlightAbilitySquares(dir) {
     );
   }
 }
-
-//winningDisplay
-function win() {
-  console.log(game.winningMeeples);
-  if (game.winningMeeples.length === 6) {
-    game.gameOver = true;
-    alert("you have won!");
-  }
-  return;
-}
-
-function tinkering() {
-  board.addEventListener("click", function (e) {
-    let x = Math.floor(e.offsetX / game.blockSize);
-    let y = Math.floor(e.offsetY / game.blockSize);
-    if (x === game.targetX && y === game.targetY) {
-      let successSound = new Audio("success.mp3");
-      successSound.play();
-    }
-    for (let i = 0; i < game.meeples.length; i++) {
-      if (game.meeples[i].xPos === x && game.meeples[i].yPos === y) {
-        activateMeeple(game.meeples[i]);
-        break;
-      }
-    }
-    console.log(x + " - " + y);
-  });
-}
-
-//function for checking square is legal
-function squareIsValid(x, y) {
-  return squareIsEmpty(x, y) && squareIsInBounds(x, y);
-}
-
-//function for iterating over meeples coords to see if square empty
-function squareIsEmpty(x, y) {
-  for (let i = 0; i < game.meeples.length; i++) {
-    if (game.meeples[i].xPos === x && game.meeples[i].yPos === y) {
-      return false;
-    }
-  }
-  return true;
-}
-
-//function for checking if in wall bounds
-function squareIsInBounds(x, y) {
-  if (x < 0 || y < 0 || x > game.boardSize - 1 || y > game.boardSize - 1) {
-    return false;
-  }
-  if (x === 0 && y === 0) {
-    return false;
-  }
-  if (x === game.boardSize - 1 && y === game.boardSize - 1) {
-    return false;
-  }
-  return true;
-  }
 
 //valid squares functions
 
