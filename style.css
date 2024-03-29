@@ -71,6 +71,14 @@ button {
   border: black 1px solid;
 }
 
+#resetButton {
+  width:200px;
+}
+#resetButton:hover {
+  background-color: chartreuse;
+  cursor: pointer;
+}
+
 #forrestjump {
   background-color: aquamarine;
 }
