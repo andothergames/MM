@@ -265,3 +265,5 @@ function validSquaresYellowAbility(meeple) {
 function validSquaresBlackAbility(meeple) {
   console.log(meeple.name);
 }
+
+//edit
