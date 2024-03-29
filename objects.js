@@ -19,3 +19,37 @@ let meepleRed = new Meeple('sidestep', 'hotpink', 15, 15, false, false, false, f
 let meepleWhite = new Meeple('skewt', 'ghostwhite', 13, 13, false, false, false, false);
 let meepleYellow = new Meeple('mcedge', 'yellow', 4, 4, false, false, false, false);
 let meepleBlack = new Meeple('carbon', 'darkslategrey', 2, 2, false, false, false, false);
+
+const game = {
+    blockSize: 25,
+    blockSizeOffset: 1,
+    boardSize: 18,
+    targetX: 0,
+    targetY: 0,
+    gameOver: false,
+    meeples: [
+      meepleGreen,
+      meepleGrey,
+      meepleBlue,
+      meepleBrown,
+      meepleRed,
+      meepleWhite,
+      meepleYellow,
+      meepleBlack,
+    ],
+    warpColour: "cornflowerblue",
+    warps: [
+      { x: 3, y: 3 },
+      { x: 7, y: 7 },
+      { x: 10, y: 10 },
+      { x: 14, y: 14 },
+    ],
+    wallColour: "MidnightBlue",
+    wallWidth: 4,
+    winningMeeples: [],
+  };
+
+  const attempt = {
+    moveCounter: 0,
+    usedMeeples: []
+  }

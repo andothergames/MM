@@ -1,35 +1,5 @@
-const game = {
-  blockSize: 25,
-  blockSizeOffset: 1,
-  boardSize: 18,
-  targetX: 0,
-  targetY: 0,
-  gameOver: false,
-  meeples: [
-    meepleGreen,
-    meepleGrey,
-    meepleBlue,
-    meepleBrown,
-    meepleRed,
-    meepleWhite,
-    meepleYellow,
-    meepleBlack,
-  ],
-  warpColour: "cornflowerblue",
-  warps: [
-    { x: 3, y: 3 },
-    { x: 7, y: 7 },
-    { x: 10, y: 10 },
-    { x: 14, y: 14 },
-  ],
-  wallColour: "MidnightBlue",
-  wallWidth: 4,
-  winningMeeples: [],
-};
-
 let board;
 let context;
-let moveCounter = 0;
 const currentBoardState = {};
 
 document.addEventListener("keypress", function (e) {
@@ -298,5 +268,5 @@ function recordBoardState() {
 //changes visual moveCounter
 function updateCounterVisual() {
   const moveCounterHtml = document.getElementById("counter");
-  moveCounterHtml.innerText = moveCounter;
+  moveCounterHtml.innerText = attempt.moveCounter;
 }
