@@ -12,6 +12,8 @@ function buttonSetUp() {
         activateMeepleAbility(game.meeples[i]);
       });
     }
+    const resetButton = document.getElementById("resetButton");
+    resetButton.addEventListener("click", resetBoardState);
   }
 
 //activate meeple passed as argument, deactivate others, adjust html classes for visuals

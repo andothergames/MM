@@ -51,6 +51,7 @@ function initialise() {
   context = board.getContext("2d");
   calculateTargetPosition();
   document.addEventListener("keyup", move);
+  recordBoardState()
   updateVisuals();
 }
 
@@ -59,7 +60,7 @@ function assessGameState() {
     incrementScore();
     game.gameOver = checkForGameWon();
     if (game.gameOver) {
-      alert('you have won!')
+      alert("you have won!");
     }
     calculateTargetPosition();
   }
@@ -68,18 +69,18 @@ function assessGameState() {
 
 function incrementScore() {
   const activeMeeple = getActiveMeeple();
-    if (!activeMeeple.reachedTarget) {
-      activeMeeple.reachedTarget = true;
-      game.winningMeeples.push(activeMeeple.name);
-      applyReachedTargetStyle(activeMeeple);
-    }
+  if (!activeMeeple.reachedTarget) {
+    activeMeeple.reachedTarget = true;
+    game.winningMeeples.push(activeMeeple.name);
+    applyReachedTargetStyle(activeMeeple);
+    recordBoardState();
+  }
 }
 
 function updateVisuals() {
   drawBoard();
   drawMeeples();
 }
-
 
 //findActiveAbility
 function findActiveAbility() {
@@ -244,29 +245,54 @@ function attemptToReachTarget() {
 }
 
 function recordBoardState() {
-  currentBoardState.moveCounter = moveCounter;
+  currentBoardState.moveCounter = attempt.moveCounter;
   currentBoardState.targetX = game.targetX;
   currentBoardState.targetY = game.targetY;
-  currentBoardState.meepleGreenX = game.meeples.meepleGreen.xPos;
-  currentBoardState.meepleGreenY = game.meeples.meepleGreen.yPos;
-  currentBoardState.meepleGreyY = game.meeples.meepleGrey.yPos;
-  currentBoardState.meepleGreyX = game.meeples.meepleGrey.xPos;
-  currentBoardState.meepleBlueX = game.meeples.meepleBlue.xPos;
-  currentBoardState.meepleBlueY = game.meeples.meepleBlue.yPos;
-  currentBoardState.meepleBrownX = game.meeples.meepleBrown.xPos;
-  currentBoardState.meepleBrownY = game.meeples.meepleBrown.yPos;
-  currentBoardState.meepleRedX = game.meeples.meepleRed.xPos;
-  currentBoardState.meepleRedY = game.meeples.meepleRed.yPos;
-  currentBoardState.meepleWhiteX = game.meeples.meepleWhite.xPos;
-  currentBoardState.meepleWhiteY = game.meeples.meepleWhite.yPos;
-  currentBoardState.meepleYellowX = game.meeples.meepleYellow.xPos;
-  currentBoardState.meepleYellowY = game.meeples.meepleYellow.yPos;
-  currentBoardState.meepleBlackX = game.meeples.meepleBlack.xPos;
-  currentBoardState.meepleBlackY = game.meeples.meepleBlack.yPos;
+  currentBoardState.meepleGreenX = meepleGreen.xPos;
+  currentBoardState.meepleGreenY = meepleGreen.yPos;
+  currentBoardState.meepleGreyY = meepleGrey.yPos;
+  currentBoardState.meepleGreyX = meepleGrey.xPos;
+  currentBoardState.meepleBlueX = meepleBlue.xPos;
+  currentBoardState.meepleBlueY = meepleBlue.yPos;
+  currentBoardState.meepleBrownX = meepleBrown.xPos;
+  currentBoardState.meepleBrownY = meepleBrown.yPos;
+  currentBoardState.meepleRedX = meepleRed.xPos;
+  currentBoardState.meepleRedY = meepleRed.yPos;
+  currentBoardState.meepleWhiteX = meepleWhite.xPos;
+  currentBoardState.meepleWhiteY = meepleWhite.yPos;
+  currentBoardState.meepleYellowX = meepleYellow.xPos;
+  currentBoardState.meepleYellowY = meepleYellow.yPos;
+  currentBoardState.meepleBlackX = meepleBlack.xPos;
+  currentBoardState.meepleBlackY = meepleBlack.yPos;
 }
 
 //changes visual moveCounter
 function updateCounterVisual() {
   const moveCounterHtml = document.getElementById("counter");
   moveCounterHtml.innerText = attempt.moveCounter;
+}
+
+function resetBoardState() {
+  console.log("hey bbe")
+  game.targetX = currentBoardState.targetX;
+  game.targetY = currentBoardState.targetY;
+  attempt.moveCounter = currentBoardState.moveCounter;
+  meepleGreen.xPos = currentBoardState.meepleGreenX;
+  meepleGreen.yPos = currentBoardState.meepleGreenY;
+  meepleGrey.xPos = currentBoardState.meepleGreyY;
+  meepleGrey.yPos = currentBoardState.meepleGreyX;
+  meepleBlue.xPos = currentBoardState.meepleBlueX;
+  meepleBlue.yPos = currentBoardState.meepleBlueY;
+  meepleBrown.xPos = currentBoardState.meepleBrownX;
+  meepleBrown.yPos = currentBoardState.meepleBrownY;
+  meepleRed.xPos = currentBoardState.meepleRedX;
+  meepleRed.yPos = currentBoardState.meepleRedY;
+  meepleWhite.xPos = currentBoardState.meepleWhiteX;
+  meepleWhite.yPos = currentBoardState.meepleWhiteY;
+  meepleYellow.xPos = currentBoardState.meepleYellowX;
+  meepleYellow.yPos = currentBoardState.meepleYellowY;
+  meepleBlack.xPos = currentBoardState.meepleBlackX;
+  meepleBlack.yPos = currentBoardState.meepleBlackY;
+  //empty used meeples array for this attempt
+  updateVisuals();
 }
