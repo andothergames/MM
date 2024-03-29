@@ -13,6 +13,7 @@ function drawBoard() {
   drawWarps();
   drawGrid();
   drawWalls();
+  updateCounterVisual()
 }
 
 function drawTarget() {

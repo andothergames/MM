@@ -178,15 +178,19 @@ function move(e) {
   switch (e.code) {
     case "ArrowUp":
       m.yPos = boundaries.upper;
+      moveCounter = moveCounter + 1;
       break;
     case "ArrowDown":
       m.yPos = boundaries.lower;
+      moveCounter = moveCounter + 1;
       break;
     case "ArrowLeft":
       m.xPos = boundaries.left;
+      moveCounter = moveCounter + 1;
       break;
     case "ArrowRight":
       m.xPos = boundaries.right;
+      moveCounter = moveCounter + 1;
       break;
   }
   assessGameState();

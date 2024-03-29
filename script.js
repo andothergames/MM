@@ -29,6 +29,8 @@ const game = {
 
 let board;
 let context;
+let moveCounter = 0;
+const currentBoardState = {};
 
 document.addEventListener("keypress", function (e) {
   switch (e.code) {
@@ -266,4 +268,35 @@ function validSquaresBlackAbility(meeple) {
   console.log(meeple.name);
 }
 
-//edit
+function attemptToReachTarget() {
+  recordBoardState();
+  while (!targetHit) {}
+}
+
+function recordBoardState() {
+  currentBoardState.moveCounter = moveCounter;
+  currentBoardState.targetX = game.targetX;
+  currentBoardState.targetY = game.targetY;
+  currentBoardState.meepleGreenX = game.meeples.meepleGreen.xPos;
+  currentBoardState.meepleGreenY = game.meeples.meepleGreen.yPos;
+  currentBoardState.meepleGreyY = game.meeples.meepleGrey.yPos;
+  currentBoardState.meepleGreyX = game.meeples.meepleGrey.xPos;
+  currentBoardState.meepleBlueX = game.meeples.meepleBlue.xPos;
+  currentBoardState.meepleBlueY = game.meeples.meepleBlue.yPos;
+  currentBoardState.meepleBrownX = game.meeples.meepleBrown.xPos;
+  currentBoardState.meepleBrownY = game.meeples.meepleBrown.yPos;
+  currentBoardState.meepleRedX = game.meeples.meepleRed.xPos;
+  currentBoardState.meepleRedY = game.meeples.meepleRed.yPos;
+  currentBoardState.meepleWhiteX = game.meeples.meepleWhite.xPos;
+  currentBoardState.meepleWhiteY = game.meeples.meepleWhite.yPos;
+  currentBoardState.meepleYellowX = game.meeples.meepleYellow.xPos;
+  currentBoardState.meepleYellowY = game.meeples.meepleYellow.yPos;
+  currentBoardState.meepleBlackX = game.meeples.meepleBlack.xPos;
+  currentBoardState.meepleBlackY = game.meeples.meepleBlack.yPos;
+}
+
+//changes visual moveCounter
+function updateCounterVisual() {
+  const moveCounterHtml = document.getElementById("counter");
+  moveCounterHtml.innerText = moveCounter;
+}
