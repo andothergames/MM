@@ -65,8 +65,10 @@ function checkForGameWon() {
 
 //randomly positions target in valid square
 function calculateTargetPosition() {
+  
   game.targetX = Math.floor(Math.random() * game.boardSize);
   game.targetY = Math.floor(Math.random() * game.boardSize);
+  // if (!squareIsValid(game.targetX, game.targetY)) {
   if (!squareIsValid(game.targetX, game.targetY)) {
     calculateTargetPosition();
   }
@@ -187,5 +189,5 @@ function move(e) {
       m.xPos = boundaries.right;
       break;
   }
-  updateVisuals();
+  assessGameState();
 }
