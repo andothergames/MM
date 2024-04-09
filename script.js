@@ -51,7 +51,6 @@ function initialise() {
   context = board.getContext("2d");
   calculateTargetPosition();
   document.addEventListener("keyup", move);
-  recordBoardState()
   updateVisuals();
 }
 
@@ -63,6 +62,7 @@ function assessGameState() {
       alert("you have won!");
     }
     calculateTargetPosition();
+    recordBoardState()
   }
   updateVisuals();
 }
