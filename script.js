@@ -51,7 +51,7 @@ function initialise() {
   context = board.getContext("2d");
   calculateTargetPosition();
   document.addEventListener("keyup", move);
-  recordBoardState();
+  recordBoardState()
   updateVisuals();
 }
 
@@ -62,7 +62,6 @@ function assessGameState() {
     if (game.gameOver) {
       alert("you have won!");
     }
-    calculateTargetPosition();
   }
   updateVisuals();
 }
@@ -73,6 +72,7 @@ function incrementScore() {
     activeMeeple.reachedTarget = true;
     game.winningMeeples.push(activeMeeple.name);
     applyReachedTargetStyle(activeMeeple);
+    calculateTargetPosition();
     recordBoardState();
   }
 }
