@@ -6,6 +6,7 @@ function buttonSetUp() {
 
     selectionButton.addEventListener("click", function () {
       activateMeeple(game.meeples[i]);
+      updateVisuals();
     });
 
     abilityButton.addEventListener("click", function () {
@@ -20,7 +21,6 @@ function buttonSetUp() {
 //activate meeple passed as argument, deactivate others, adjust html classes for visuals
 function activateMeeple(m) {
   if (getActiveMeeple() === m) return;
-  
   deactivateMeepleAbilities();
   for (let i = 0; i < game.meeples.length; i++) {
     game.meeples[i].isActive = m === game.meeples[i];
