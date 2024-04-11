@@ -82,52 +82,39 @@ function updateVisuals() {
   drawMeeples();
 }
 
-//findActiveAbility
-function findActiveAbility() {
+function getValidAbilitySquares() {
+  let dir;
+  const activeMeeple = getActiveMeeple();
+  let ability;
   for (let i = 0; i < game.meeples.length; i++) {
     if (game.meeples[i].abilityActive) {
-      return game.meeples[i];
+      ability = game.meeples[i].name
     }
   }
-}
-
-//meepleAbility
-function meepleAbility() {
-  const m = getActiveMeeple();
-
-  if (m.name === "forrestjump") {
-    const dir = validSquaresGreenAbility(m);
-    console.log(dir);
-    highlightAbilitySquares(dir);
+  switch(ability){
+    case "forrestjump":
+      dir = validSquaresGreenAbility(activeMeeple);
+      break
+    case "ozzymosis":
+      dir = validSquaresGreyAbility(activeMeeple);
+      break
+    case "bluebeamer":
+      dir = validSquaresBlueAbility(activeMeeple);
+      break
+    case "shortstop":
+      dir = validSquaresBrownAbility(activeMeeple);
+      break
+    case "sidestep":
+      dir = validSquaresRedAbility(activeMeeple);
+      break
+    case "skewt":
+      dir = validSquaresWhiteAbility(activeMeeple);
+      break
+    case "mcedge":
+      dir = validSquaresYellowAbility(activeMeeple);
+      break
   }
-  if (m.name === "ozzymosis") {
-    const dir = validSquaresGreyAbility(m);
-    highlightAbilitySquares(dir);
-  }
-  if (m.name === "bluebeamer") {
-    const dir = validSquaresBlueAbility(m);
-    highlightAbilitySquares(dir);
-  }
-  if (m.name === "shortstop") {
-    const dir = validSquaresRedAbility(m);
-    highlightAbilitySquares(dir);
-  }
-  if (m.name === "sidestep") {
-    const dir = validSquaresBrownAbility(m);
-    highlightAbilitySquares(dir);
-  }
-  if (m.name === "skewt") {
-    const dir = validSquaresWhiteAbility(m);
-    highlightAbilitySquares(dir);
-  }
-  if (m.name === "mcedge") {
-    const dir = validSquaresYellowAbility(m);
-    highlightAbilitySquares(dir);
-  }
-  if (m.name === "carbon") {
-    const dir = validSquaresBlackAbility(m);
-    highlightAbilitySquares(dir);
-  }
+  return dir;
 }
 
 //ability used style
