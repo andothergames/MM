@@ -1,24 +1,26 @@
 //add event listeners to selection and ability buttons
 function buttonSetUp() {
-    for (let i = 0; i < game.meeples.length; i++) {
-      const selectionButton = document.getElementById(game.meeples[i].name);
-      const abilityButton = document.getElementById(`${game.meeples[i].name}ab`);
-  
-      selectionButton.addEventListener("click", function () {
-        activateMeeple(game.meeples[i]);
-      });
-  
-      abilityButton.addEventListener("click", function () {
-        activateMeepleAbility(game.meeples[i]);
-        updateVisuals();
-      });
-    }
-    const resetButton = document.getElementById("resetButton");
-    resetButton.addEventListener("click", resetBoardState);
+  for (let i = 0; i < game.meeples.length; i++) {
+    const selectionButton = document.getElementById(game.meeples[i].name);
+    const abilityButton = document.getElementById(`${game.meeples[i].name}ab`);
+
+    selectionButton.addEventListener("click", function () {
+      activateMeeple(game.meeples[i]);
+    });
+
+    abilityButton.addEventListener("click", function () {
+      activateMeepleAbility(game.meeples[i]);
+      updateVisuals();
+    });
   }
+  const resetButton = document.getElementById("resetButton");
+  resetButton.addEventListener("click", resetBoardState);
+}
 
 //activate meeple passed as argument, deactivate others, adjust html classes for visuals
 function activateMeeple(m) {
+  if (getActiveMeeple() === m) return;
+  
   deactivateMeepleAbilities();
   for (let i = 0; i < game.meeples.length; i++) {
     game.meeples[i].isActive = m === game.meeples[i];
@@ -33,7 +35,6 @@ function activateMeeple(m) {
 //activate meeple's ability passed as argument, deactivate others, call activate meeple
 //If the passed meeple's ability is active, it becomes insactive and the function returns.
 function activateMeepleAbility(m) {
-
   activateMeeple(m);
   if (m.abilityActive) {
     m.abilityActive = !m.abilityActive;
@@ -45,7 +46,7 @@ function activateMeepleAbility(m) {
 }
 
 //deactivate all meeple's abilities
-function deactivateMeepleAbilities(){
+function deactivateMeepleAbilities() {
   for (let i = 0; i < game.meeples.length; i++) {
     game.meeples[i].abilityActive = false;
   }
@@ -53,12 +54,12 @@ function deactivateMeepleAbilities(){
 
 //returns active meeple
 function getActiveMeeple() {
-    for (let i = 0; i < game.meeples.length; i++) {
-      if (game.meeples[i].isActive) {
-        return game.meeples[i];
-      }
+  for (let i = 0; i < game.meeples.length; i++) {
+    if (game.meeples[i].isActive) {
+      return game.meeples[i];
     }
   }
+}
 
 //returns true if any meeple ability is active
 function anAbilityIsActive() {
@@ -70,13 +71,13 @@ function anAbilityIsActive() {
   return false;
 }
 
-  //returns false if no active meeple or meeple had already hit target, otherwise checks if target was hit by active meeple
+//returns false if no active meeple or meeple had already hit target, otherwise checks if target was hit by active meeple
 function targetHit() {
-    let m = getActiveMeeple();
-    if (m === undefined) return false;
-    if (m.reachedTarget) return false;
-    return (m.xPos === game.targetX) && (m.yPos === game.targetY);
-  }
+  let m = getActiveMeeple();
+  if (m === undefined) return false;
+  if (m.reachedTarget) return false;
+  return m.xPos === game.targetX && m.yPos === game.targetY;
+}
 
 //changes opacity of target image when meeple reaches target
 function applyReachedTargetStyle(m) {
@@ -92,7 +93,6 @@ function checkForGameWon() {
 
 //randomly positions target in valid square
 function calculateTargetPosition() {
-  
   game.targetX = Math.floor(Math.random() * game.boardSize);
   game.targetY = Math.floor(Math.random() * game.boardSize);
   // if (!squareIsValid(game.targetX, game.targetY)) {
@@ -124,7 +124,7 @@ function squareIsInBounds(x, y) {
   if (x === 0 && y === 0) {
     return false;
   }
-  
+
   if (x === game.boardSize - 1 && y === game.boardSize - 1) {
     return false;
   }
@@ -194,11 +194,10 @@ function calculateLimits() {
   return limits;
 }
 
-
 function move(e) {
   let m = getActiveMeeple();
   if (m === undefined) {
-    alert('select a meeple')
+    alert("select a meeple");
   }
   let boundaries = calculateLimits();
 
