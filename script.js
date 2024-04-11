@@ -206,7 +206,34 @@ function validSquaresGreyAbility(meeple) {
 }
 
 function validSquaresBrownAbility(meeple) {
-  console.log(meeple.name);
+  const dir = {};
+  const limits = calculateLimits();
+
+  if (limits.upper < meeple.yPos - 1) {
+    dir.up = {x: meeple.xPos, y: limits.upper+1};
+  } else {
+    dir.up = {x: meeple.xPos, y: limits.upper};
+  }
+  
+  if (limits.lower > meeple.yPos + 1) {
+    dir.down = {x: meeple.xPos, y: limits.lower-1};
+  } else {
+    dir.down = {x: meeple.xPos, y: limits.lower};
+  }
+
+  if (limits.left < meeple.xPos - 1) {
+    dir.left = {x: limits.left + 1, y: meeple.yPos};
+  } else {
+    dir.left = {x: limits.left, y: meeple.yPos};
+  }
+
+  if (limits.right > meeple.xPos + 1) {
+    dir.right = {x: limits.right - 1, y: meeple.yPos};
+  } else {
+    dir.right = {x: limits.right, y: meeple.yPos};
+  }
+  
+  return dir;
 }
 
 function validSquaresYellowAbility(meeple) {
