@@ -233,6 +233,17 @@ function validSquaresBrownAbility(meeple) {
     dir.right = {x: limits.right, y: meeple.yPos};
   }
   
+  if (limits.upper === dir.up.y) delete dir.up;
+  if (limits.lower === dir.down.y) delete dir.down;
+  if (limits.left === dir.left.x) delete dir.left;
+  if (limits.right === dir.right.x) delete dir.right;
+
+  for (let move in dir) {
+    if (dir[move].x === meeple.xPos && dir[move].y === meeple.yPos) {
+      delete dir[move];
+    }
+  }
+
   return dir;
 }
 
