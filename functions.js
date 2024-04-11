@@ -45,6 +45,16 @@ function getActiveMeeple() {
     }
   }
 
+//returns true if any meeple ability is active
+function anAbilityIsActive() {
+  for (let i = 0; i < game.meeples.length; i++) {
+    if (game.meeples[i].abilityActive) {
+      return true;
+    }
+  }
+  return false;
+}
+
   //returns false if no active meeple or meeple had already hit target, otherwise checks if target was hit by active meeple
 function targetHit() {
     let m = getActiveMeeple();

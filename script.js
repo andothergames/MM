@@ -80,16 +80,19 @@ function incrementScore() {
 function updateVisuals() {
   drawBoard();
   drawMeeples();
-  highlightAbilitySquares();
+  if (anAbilityIsActive()) {
+    highlightAbilitySquares();
+  }
 }
 
 function getValidAbilitySquares() {
-  let dir;
+  let dir = {};
   const activeMeeple = getActiveMeeple();
-  let ability;
+  let ability = "";
   for (let i = 0; i < game.meeples.length; i++) {
     if (game.meeples[i].abilityActive) {
-      ability = game.meeples[i].name
+      ability = game.meeples[i].name;
+      break;
     }
   }
   switch(ability){
@@ -273,13 +276,13 @@ function resetBoardState() {
 }
 
 function highlightAbilitySquares() {
-  // const dir = getValidAbilitySquares();
-  const dir = {
-    up: { x: 8, y: 5 },
-    down: { x: 8, y: 11 },
-    left: { x: 5, y: 8 },
-    right: { x: 11, y: 8 }
-  };
+  const dir = getValidAbilitySquares();
+  // const dir = {
+  //   up: { x: 8, y: 5 },
+  //   down: { x: 8, y: 11 },
+  //   left: { x: 5, y: 8 },
+  //   right: { x: 11, y: 8 }
+  // };
   context.fillStyle = "lightPink";
 
   for (let key in dir) {
