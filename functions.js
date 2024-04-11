@@ -10,6 +10,7 @@ function buttonSetUp() {
   
       abilityButton.addEventListener("click", function () {
         activateMeepleAbility(game.meeples[i]);
+        updateVisuals();
       });
     }
     const resetButton = document.getElementById("resetButton");
@@ -30,9 +31,14 @@ function activateMeeple(m) {
 }
 
 //activate meeple's ability passed as argument, deactivate others, call activate meeple
+//If the passed meeple's ability is active, it becomes insactive and the function returns.
 function activateMeepleAbility(m) {
 
   activateMeeple(m);
+  if (m.abilityActive) {
+    m.abilityActive = !m.abilityActive;
+    return;
+  }
   for (let i = 0; i < game.meeples.length; i++) {
     game.meeples[i].abilityActive = m === game.meeples[i];
   }
