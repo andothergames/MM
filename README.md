@@ -12,15 +12,26 @@ collab between yanader and andothergames
 
 **abilities**
 * ability functions for grey, yellow, brown, black
-* after ability selected, key presses to move to highlighted spots
-* deactiviting highlights if another meeple ability is selected before a key press
-* ability used functionality 
+* after ability selected, mouse click to move to highlighted spots
+* once an ability has been used in a turn, format the ability button to show this 
+* on reset game state, deactivate all meeple abilities
+* carbon meeple ability
+
+**gameplay**
+
+* cap usable meeples in one attempt to three meeples
+
+**bugs**
+* page scrolling on meeple move arrow press
+* draw target on top of pink highlight squares
+* F5 key for refresh triggering 'select a meeple' alert in key up event
+* meeple/highlight square size is adapted for grid lines however this produces a gap when square on board edges
 
 **visuals**
-* grid lines overtop of meeples
 * instructions pop up
 * reset game state board button
 * flip board button
+* dark mode toggle
 
 **extras**
 * web socket two player functionality
