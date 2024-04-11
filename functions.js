@@ -30,6 +30,7 @@ function activateMeeple(m) {
 }
 
 //activate meeple's ability passed as argument, deactivate others, call activate meeple
+//If the passed meeple's ability is active, it becomes insactive and the function returns.
 function activateMeepleAbility(m) {
   activateMeeple(m);
   if (m.abilityActive) {
