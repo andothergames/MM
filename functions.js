@@ -18,6 +18,7 @@ function buttonSetUp() {
 
 //activate meeple passed as argument, deactivate others, adjust html classes for visuals
 function activateMeeple(m) {
+  deactivateMeepleAbilities();
   for (let i = 0; i < game.meeples.length; i++) {
     game.meeples[i].isActive = m === game.meeples[i];
     game.meeples[i].isActive
@@ -30,9 +31,17 @@ function activateMeeple(m) {
 
 //activate meeple's ability passed as argument, deactivate others, call activate meeple
 function activateMeepleAbility(m) {
+
   activateMeeple(m);
   for (let i = 0; i < game.meeples.length; i++) {
     game.meeples[i].abilityActive = m === game.meeples[i];
+  }
+}
+
+//deactivate all meeple's abilities
+function deactivateMeepleAbilities(){
+  for (let i = 0; i < game.meeples.length; i++) {
+    game.meeples[i].abilityActive = false;
   }
 }
 
