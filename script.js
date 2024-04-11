@@ -51,7 +51,7 @@ function initialise() {
   context = board.getContext("2d");
   calculateTargetPosition();
   document.addEventListener("keyup", move);
-  recordBoardState()
+  recordBoardState();
   updateVisuals();
 }
 
@@ -80,6 +80,7 @@ function incrementScore() {
 function updateVisuals() {
   drawBoard();
   drawMeeples();
+  highlightAbilitySquares();
 }
 
 //findActiveAbility
@@ -134,19 +135,6 @@ function meepleAbility() {
 function abilityUsedStyle(m) {
   const meeplehtml = document.getElementById(`${m.name}ab`);
   meeplehtml.innerText = "★";
-}
-
-function highlightAbilitySquares(dir) {
-  context.fillStyle = "pink";
-
-  for (let key in dir) {
-    context.fillRect(
-      dir[key].x * game.blockSize,
-      dir[key].y * game.blockSize,
-      game.blockSize,
-      game.blockSize
-    );
-  }
 }
 
 //valid squares functions
@@ -273,7 +261,7 @@ function updateCounterVisual() {
 }
 
 function resetBoardState() {
-  console.log("hey bbe")
+  console.log("hey bbe");
   game.targetX = currentBoardState.targetX;
   game.targetY = currentBoardState.targetY;
   attempt.moveCounter = currentBoardState.moveCounter;
@@ -295,4 +283,24 @@ function resetBoardState() {
   meepleBlack.yPos = currentBoardState.meepleBlackY;
   //empty used meeples array for this attempt
   updateVisuals();
+}
+
+function highlightAbilitySquares() {
+  const dir = getValidAbilitySquares();
+  // const dir = {
+  //   up: { x: 8, y: 5 },
+  //   down: { x: 8, y: 11 },
+  //   left: { x: 5, y: 8 },
+  //   right: { x: 11, y: 8 }
+  // };
+  context.fillStyle = "lightPink";
+
+  for (let key in dir) {
+    context.fillRect(
+      dir[key].x * game.blockSize + game.blockSizeOffset,
+      dir[key].y * game.blockSize + game.blockSizeOffset,
+      game.blockSize - game.blockSizeOffset * 2,
+      game.blockSize - game.blockSizeOffset * 2
+    );
+  }
 }
