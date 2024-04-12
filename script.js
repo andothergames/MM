@@ -211,29 +211,29 @@ function validSquaresBrownAbility(meeple) {
   const limits = calculateLimits();
 
   if (limits.upper < meeple.yPos - 1) {
-    dir.up = {x: meeple.xPos, y: limits.upper+1};
+    dir.up = { x: meeple.xPos, y: limits.upper + 1 };
   } else {
-    dir.up = {x: meeple.xPos, y: limits.upper};
+    dir.up = { x: meeple.xPos, y: limits.upper };
   }
-  
+
   if (limits.lower > meeple.yPos + 1) {
-    dir.down = {x: meeple.xPos, y: limits.lower-1};
+    dir.down = { x: meeple.xPos, y: limits.lower - 1 };
   } else {
-    dir.down = {x: meeple.xPos, y: limits.lower};
+    dir.down = { x: meeple.xPos, y: limits.lower };
   }
 
   if (limits.left < meeple.xPos - 1) {
-    dir.left = {x: limits.left + 1, y: meeple.yPos};
+    dir.left = { x: limits.left + 1, y: meeple.yPos };
   } else {
-    dir.left = {x: limits.left, y: meeple.yPos};
+    dir.left = { x: limits.left, y: meeple.yPos };
   }
 
   if (limits.right > meeple.xPos + 1) {
-    dir.right = {x: limits.right - 1, y: meeple.yPos};
+    dir.right = { x: limits.right - 1, y: meeple.yPos };
   } else {
-    dir.right = {x: limits.right, y: meeple.yPos};
+    dir.right = { x: limits.right, y: meeple.yPos };
   }
-  
+
   if (limits.upper === dir.up.y) delete dir.up;
   if (limits.lower === dir.down.y) delete dir.down;
   if (limits.left === dir.left.x) delete dir.left;
@@ -249,7 +249,105 @@ function validSquaresBrownAbility(meeple) {
 }
 
 function validSquaresYellowAbility(meeple) {
-  console.log(meeple.name);
+  const dir = {};
+  const limits = calculateLimits();
+  const m = getActiveMeeple();
+
+  if (limits.upper === 0 || (limits.upper === 1 && m.xPos === 0)) {
+    dir.up = { x: m.xPos, y: findBiggest(m.xPos, false) + 1 };
+  }
+
+  if (limits.lower === 17 || (limits.lower === 16 && m.xPos === 17)) {
+    dir.down = { x: m.xPos, y: findSmallest(m.xPos, false) };
+  }
+
+  if (limits.left === 0 || (limits.left === 1 && m.yPos === 0)) {
+    dir.left = { x: findBiggest(m.yPos, true), y: m.yPos };
+  }
+
+  if (limits.right === 17 || (limits.right === 16 && m.yPos === 17)) {
+    dir.right = { x: findSmallest(m.yPos, true), y: m.yPos };
+  }
+  console.log(dir)
+  return dir;
+}
+
+function findBiggest(n, row) {
+  let biggest = 0;
+  if (row) {
+    for (let i = 0; i < boardStructure.length; i++) {
+      let wall = boardStructure[i];
+      if (wall.existson === n) {
+        if (wall.after > biggest) biggest = wall.after;
+      }
+    }
+    for (let i = 0; i < game.meeples.length; i++) {
+      if (game.meeples.yPos === n) {
+        if (game.meeples.yPos > biggest) biggest = game.meeples.yPos;
+      }
+    }
+  } else {
+    for (let i = 0; i < boardStructure.length; i++) {
+      let wall = boardStructure[i];
+      if (wall.existson === n) {
+        if (wall.after > biggest) {
+          biggest = wall.after;
+        }
+      }
+    }
+    for (let i = 0; i < game.meeples.length; i++) {
+      if (game.meeples[i].xPos === n) {
+        if (game.meeples.yPos > biggest) {
+          biggest = game.meeples.yPos;
+        }
+      }
+    }
+  }
+  return biggest;
+}
+
+function findSmallest(n, row) {
+  //wip
+  let smallest = 17;
+  if (row) {
+    for (let i = 0; i < boardStructure.length; i++) {
+      let wall = boardStructure[i];
+      if (wall.existson === n) {
+        if (wall.after < smallest) smallest = wall.after;
+      }
+    }
+    for (let i = 0; i < game.meeples.length; i++) {
+      if (game.meeples.yPos === n) {
+        if (game.meeples.yPos < smallest) smallest = game.meeples.yPos;
+      }
+    }
+  } else {
+    for (let i = 0; i < boardStructure.length; i++) {
+      let wall = boardStructure[i];
+      if (wall.existson === n) {
+        if (wall.after < smallest) {
+          smallest = wall.after;
+        }
+      }
+    }
+    for (let i = 0; i < game.meeples.length; i++) {
+      if (game.meeples[i].xPos === n) {
+        if (game.meeples.yPos < smallest) {
+          smallest = game.meeples.yPos;
+        }
+      }
+    }
+  }
+  return smallest;
+
+}
+
+function meepleBetweenEdgeAndWallCol(col, cell) {
+  for (let i = game.meeples.length; i > 0; i--) {
+    if (game.meeple[i].xPos === col && game.meeple[i].yPos >= cell) {
+      return game.meeple[i].yPos;
+    }
+  }
 }
 
 function validSquaresBlackAbility(meeple) {
@@ -341,9 +439,7 @@ function useAbility(e) {
   const m = getActiveMeeple();
 
   const cursorX = Math.floor(e.offsetX / game.blockSize);
-  console.log(cursorX);
   const cursorY = Math.floor(e.offsetY / game.blockSize);
-  console.log(cursorY);
 
   for (let key in dir) {
     if (dir[key].x === cursorX && dir[key].y === cursorY) {
