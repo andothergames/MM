@@ -203,7 +203,14 @@ function validSquaresBlueAbility(meeple) {
 }
 
 function validSquaresGreyAbility(meeple) {
-  console.log("shouldnt be in here");
+  const dir = {};
+  const limits = calculateLimits();
+  // I'm going to use availableStops() but that doesn't
+  // yet look at meeples getting in the way. that MIGHT be ok tho
+
+  const walls = availableStops(meeple, false);
+  const stopPoints = secondWalls(walls, meeple.yPos);
+  console.log(stopPoints);
 }
 
 function validSquaresBrownAbility(meeple) {
@@ -357,4 +364,47 @@ function useAbility(e) {
       break;
     }
   }
+}
+
+function availableStops(m, row) {
+  let last = game.boardSize - 1
+  let stops = [0, last];
+  
+  for (let i = 0; i < boardStructure.length; i++) {
+    let wall = boardStructure[i];
+    
+    if (row) {
+      if (m.yPos === 0) stops[0] = 1;
+      if (m.yPos === last) stops [1] = last -1;
+      if (wall.row && wall.existson === m.yPos) {
+        if (wall.after < m.xPos) {
+          stops.push(wall.after + 1);
+        } else {
+          stops.push(wall.after);
+        }
+      }
+    } else {
+      if (m.xPos === 0) stops[0] = 1;
+      if (m.xPos === last) stops [1] = last -1;
+      if (!wall.row && wall.existson === m.xPos) {
+        if (wall.after < m.yPos) {
+          stops.push(wall.after +1);
+        } else {
+          stops.push(wall.after);
+        }
+      }
+    }
+  }
+  stops = stops.sort(function(a, b) {return a - b;});
+  return stops;
+}
+
+function secondWalls(arr, x) {
+  let walls = arr;
+  walls.push(x);
+  walls = walls.sort(function(a, b) {return a - b;});
+  let index = walls.indexOf(x);
+  let lower = walls[Math.max(0, index -2)];
+  let upper = walls[Math.min(walls.length - 1, index + 2)];
+  return [lower, upper]
 }
