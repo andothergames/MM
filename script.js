@@ -252,6 +252,7 @@ function updateCounterVisual() {
 }
 
 function resetBoardState() {
+  deactivateMeepleAbilities();
   game.targetX = currentBoardState.targetX;
   game.targetY = currentBoardState.targetY;
   attempt.moveCounter = currentBoardState.moveCounter;
