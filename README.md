@@ -14,7 +14,6 @@ collab between yanader and andothergames
 * ability functions for grey, yellow, brown, black
 * after ability selected, mouse click to move to highlighted spots
 * once an ability has been used in a turn, format the ability button to show this 
-* on reset game state, deactivate all meeple abilities
 * carbon meeple ability
 
 **gameplay**

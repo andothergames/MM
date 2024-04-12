@@ -51,6 +51,7 @@ function initialise() {
   context = board.getContext("2d");
   calculateTargetPosition();
   document.addEventListener("keyup", move);
+  document.addEventListener("click", useAbility);
   recordBoardState();
   updateVisuals();
 }
@@ -95,28 +96,28 @@ function getValidAbilitySquares() {
       break;
     }
   }
-  switch(ability){
+  switch (ability) {
     case "forrestjump":
       dir = validSquaresGreenAbility(activeMeeple);
-      break
+      break;
     case "ozzymosis":
       dir = validSquaresGreyAbility(activeMeeple);
-      break
+      break;
     case "bluebeamer":
       dir = validSquaresBlueAbility(activeMeeple);
-      break
+      break;
     case "shortstop":
       dir = validSquaresBrownAbility(activeMeeple);
-      break
+      break;
     case "sidestep":
       dir = validSquaresRedAbility(activeMeeple);
-      break
+      break;
     case "skewt":
       dir = validSquaresWhiteAbility(activeMeeple);
-      break
+      break;
     case "mcedge":
       dir = validSquaresYellowAbility(activeMeeple);
-      break
+      break;
   }
   return dir;
 }
@@ -289,7 +290,7 @@ function updateCounterVisual() {
 }
 
 function resetBoardState() {
-  console.log("hey bbe");
+  deactivateMeepleAbilities();
   game.targetX = currentBoardState.targetX;
   game.targetY = currentBoardState.targetY;
   attempt.moveCounter = currentBoardState.moveCounter;
@@ -330,5 +331,30 @@ function highlightAbilitySquares() {
       game.blockSize - game.blockSizeOffset * 2,
       game.blockSize - game.blockSizeOffset * 2
     );
+  }
+}
+
+function useAbility(e) {
+  const dir = getValidAbilitySquares();
+  if (Object.keys(dir).length === 0) return;
+
+  const m = getActiveMeeple();
+
+  const cursorX = Math.floor(e.offsetX / game.blockSize);
+  console.log(cursorX);
+  const cursorY = Math.floor(e.offsetY / game.blockSize);
+  console.log(cursorY);
+
+  for (let key in dir) {
+    if (dir[key].x === cursorX && dir[key].y === cursorY) {
+      console.log("in range");
+      m.xPos = cursorX;
+      m.yPos = cursorY;
+      m.abilityUsed = true;
+      attempt.moveCounter++;
+      deactivateMeepleAbilities();
+      updateVisuals();
+      break;
+    }
   }
 }
